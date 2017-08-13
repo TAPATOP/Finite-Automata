@@ -86,10 +86,14 @@ char* re2post(char *re)
 
 int main()
 {
-	char* test = "a.b*.c.d|e.f";
+	char* test = "a.b.((((c.d).m).n))";
 	std::cout << ss::infix_to_postfix(test) << std::endl;
 	//std::cout << re2post("((ab|cd)*(wx|yz))") << std::endl;
-	std::cout << re2post("ab*cd|ef") << std::endl;
+	std::cout << re2post("ab((((cd)m)n))") << std::endl;
 	// ((a.b*.(c.d)*)|d.e*)|(a.d)*
 	return 0;
 }
+
+// / postfix convertor testing
+// a.(b*.c.d)|e.f
+// ((ab|cd)*(wx|yz))

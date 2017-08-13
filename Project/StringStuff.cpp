@@ -92,7 +92,10 @@ namespace ss
 			{
 				do
 				{
-					postfix[pIndex++] = stack.topNpop();
+					if (stack.top() != '(')
+					{
+						postfix[pIndex++] = stack.topNpop();
+					}
 
 					if (stack.isEmpty())
 					{
@@ -132,7 +135,9 @@ namespace ss
 		{
 			currentSymbol = stack.topNpop();
 			if (currentSymbol != '(')
+			{
 				postfix[pIndex++] = currentSymbol;
+			}
 		}
 		postfix[pIndex] = 0;
 		return postfix;
