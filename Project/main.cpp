@@ -88,7 +88,7 @@ int main()
 {
 	char* test = "((a.b|c.d)*.(w.x|y.z))";
 	std::cout << ss::infix_to_postfix(test) << std::endl;
-	//std::cout << re2post("((ab|cd)*(wx|yz))") << std::endl;
+	std::cout << re2post("((ab|cd)*(wx|yz))") << std::endl;
 	//std::cout << re2post("((ab*(cd)*)|de*)|(ad)*") << std::endl;
 	// ((a.b*.(c.d)*)|d.e*)|(a.d)*
 	return 0;

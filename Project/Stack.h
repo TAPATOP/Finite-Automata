@@ -11,10 +11,10 @@ public:
 
 	void push(TYPE);
 	bool pop();
-	TYPE top();
+	TYPE top() const;
 	TYPE topNpop();
 	void visualize() const;
-	bool isEmpty();
+	bool isEmpty() const;
 
 	Stack& operator=(Stack const & Other);
 
@@ -111,7 +111,7 @@ bool Stack<TYPE>::pop()
 //
 // top
 template <class TYPE>
-TYPE Stack<TYPE>::top()
+TYPE Stack<TYPE>::top() const
 {
 	//	if (isEmpty()) return 0;
 
@@ -146,7 +146,7 @@ void Stack<TYPE>::visualize() const
 //
 // isEmpty
 template <class TYPE>
-bool Stack<TYPE>::isEmpty()
+bool Stack<TYPE>::isEmpty() const
 {
 	if (position == 0) return 1;
 	return 0;
@@ -175,3 +175,5 @@ Stack<TYPE>::~Stack()
 {
 	delete[] data;
 }
+
+// TODO: fix return types

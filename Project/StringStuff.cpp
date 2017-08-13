@@ -10,13 +10,10 @@ namespace ss
 	// 1 -> '|'
 	// 2 -> '.'
 	// 3 -> '*'
-	// 69 -> '('
 	int operator_precedence(char c)
 	{
 		switch (c)
 		{
-		case '(':
-			return -1;
 		case '|':
 			return 3;
 		case '.':
@@ -106,19 +103,31 @@ namespace ss
 				continue;
 			}
 
-			if (stack.isEmpty() || operator_precedence(currentSymbol) > operator_precedence(stack.top()))
+			if (stack.isEmpty() || stack.top() == '(')
 			{
 				stack.push(currentSymbol);
+				continue;
 			}
-			else
+
+			switch (currentSymbol)
 			{
-				do
+			case '*':
+			case '.':
+			case '|':
+				if (operator_precedence(stack.top()) <= operator_precedence(currentSymbol))
 				{
-					postfix[pIndex++] = stack.topNpop();
-				} while (!(stack.isEmpty()) && operator_precedence(currentSymbol) > operator_precedence(stack.top()));
+					do
+					{
+						postfix[pIndex++] = stack.topNpop();
+					} while (stack.top() != '(' && operator_precedence(currentSymbol) <= operator_precedence(stack.top()) );
+					stack.push(currentSymbol);
+					break;
+				}
 				stack.push(currentSymbol);
+				break;
 			}
 		}
+		postfix[pIndex] = 0;
 		return postfix;
 	}
 };
