@@ -144,18 +144,22 @@ namespace ss
 	// / checks validity of input
 	// returns nullptr if:
 	// - the brackets don't match
-	char* infix_to_postfix(char* infix)
+	char* infix_to_postfix(char* inputInfix)
 	{
-		// preprocess_infix(infix);
+		char* infix = preprocess_infix(inputInfix);
+
+		if (infix == nullptr) return nullptr;
+
 		int infixSize = strlen(infix);
 
-		if (infixSize > 1024)
+		const int maxSize = 1024;
+
+		if (infixSize > maxSize)
 		{
 			std::cout << "Too large regex" << std::endl;
 			return nullptr;
 		}
 
-		const int maxSize = 1024;
 		char* postfix = new char[maxSize + 1];
 
 		Stack<char> stack(maxSize);

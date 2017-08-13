@@ -86,7 +86,7 @@ char* re2post(char *re)
 
 int main()
 {
-	char* test = "((ab*()*)|de*)|(ad)*";
+	char* test = "((ab*(c.d)*)|de*)|(ad)*";
 	char* test2 = "((a.b*.(c.d)*)|d.e*)|(a.d)*";
 	char* testTransformed = ss::preprocess_infix(test);
 
