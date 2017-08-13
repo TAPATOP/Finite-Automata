@@ -86,14 +86,32 @@ char* re2post(char *re)
 
 int main()
 {
-	char* test = "a.b.((((c.d).m).n))";
-	std::cout << ss::infix_to_postfix(test) << std::endl;
-	//std::cout << re2post("((ab|cd)*(wx|yz))") << std::endl;
-	std::cout << re2post("ab((((cd)m)n))") << std::endl;
+	char* test = "((ab*()*)|de*)|(ad)*";
+	char* test2 = "((a.b*.(c.d)*)|d.e*)|(a.d)*";
+	char* testTransformed = ss::preprocess_infix(test);
+
+	//if (testTransformed != nullptr)
+	{
+		std::cout << testTransformed << std::endl;
+	}
+	std::cout << ss::infix_to_postfix(testTransformed) << std::endl;
+	std::cout << ss::infix_to_postfix(test2) << std::endl;
+
+	//std::cout << ss::infix_to_postfix("a.b|c.d|x.y") << std::endl;
+	//std::cout << ss::infix_to_postfix("(a.b)|(c.d)|(x.y)") << std::endl;
+	std::cout << re2post(test) << std::endl;
 	// ((a.b*.(c.d)*)|d.e*)|(a.d)*
 	return 0;
 }
 
-// / postfix convertor testing
+// / infix_to_postfix() testing with valid expressions
 // a.(b*.c.d)|e.f
-// ((ab|cd)*(wx|yz))
+// ((a.b|c.d)*.(w.x|y.z))
+// a.b.((((c.d).m).n))
+// ((a.b*.(c.d)*)|d.e*)|(a.d)*
+// (a.b)|(c.d)|(x.y) and a.b|c.d|x.y
+
+// / preprocess_infix() testing + testing results in infix_to_postfix()
+// ab(c*d)e
+// a(b*cd)|ef and a.(b*.c.d)|e.f
+// ((ab|cd)*(wx|yz)) and ((a.b|c.d)*.(w.x|y.z))
