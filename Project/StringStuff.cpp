@@ -127,6 +127,13 @@ namespace ss
 				break;
 			}
 		}
+
+		while (!stack.isEmpty())
+		{
+			currentSymbol = stack.topNpop();
+			if (currentSymbol != '(')
+				postfix[pIndex++] = currentSymbol;
+		}
 		postfix[pIndex] = 0;
 		return postfix;
 	}
