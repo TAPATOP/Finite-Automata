@@ -75,6 +75,8 @@ namespace ss
 		// we might have to expand the string in order to fit the new explicit '.' operators
 		while (infix[index])
 		{
+			if (infix == nullptr) return nullptr;
+
 			if (symbol_type(infix[index]) == 3)
 			{
 				++newSize;

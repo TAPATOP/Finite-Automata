@@ -3,32 +3,50 @@
 #include "LinkedList.h"
 #include "Stack.h"
 #include "StringStuff.h"
+enum StateTransitionCodes
+{
+	Split = 127,
+	Match,
+	Digit,
+	Letter
+};
 
 struct State
 {
 	unsigned short transitionCharacter = 0;
 	State* next = nullptr;
 	State* next2 = nullptr;
-	int listID = 0;
+	int listID = -1;
 };
 
-int main()
+struct Automata
 {
-	std::cout << (unsigned short)-1 << std::endl;
-	char* test = "((a.b|cd)*(w.x|y.z))";
-	char* test2 = "((ab|cd)*(wx|yz))";
-	char* testTransformed = ss::preprocess_infix(test);
+	State* startState = nullptr;
+	LinkedList<State*> endStates;
+};
 
-	//if (testTransformed != nullptr)
+int main(int argc, char** argv)
+{
+	argv[1] = "file.txt";
+	argv[2] = "?{!";
+	argc = 3;
+
+	char* postfix = ss::infix_to_postfix(argv[2]);
+
+	// checks if preprocess_infix() or infix_to_postfix() have found an error;
+	// doesnt output anything because these functions already do
+	if (postfix == nullptr)
 	{
-		std::cout << testTransformed << std::endl;
+		return 1;
 	}
-	std::cout << ss::infix_to_postfix(testTransformed) << std::endl;
-	std::cout << ss::infix_to_postfix(test2) << std::endl;
+
+	std::cout << postfix << std::endl;
+
 	return 0;
 }
 
 // TODO: Big three for the structures
+// make it work with empty regex
 
 // / infix_to_postfix() testing with valid expressions
 // a.(b*.c.d)|e.f
