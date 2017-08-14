@@ -182,7 +182,7 @@ namespace ss
 
 			if (currentSymbol == '(')
 			{
-				stack.push('(');
+				stack.push(currentSymbol);
 				continue;
 			}
 

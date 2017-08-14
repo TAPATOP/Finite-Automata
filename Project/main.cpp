@@ -86,8 +86,8 @@ char* re2post(char *re)
 
 int main()
 {
-	char* test = "((ab*(c.d)*)|de*)|(ad)*";
-	char* test2 = "((a.b*.(c.d)*)|d.e*)|(a.d)*";
+	char* test = "((a.b|cd)*(w.x|y.z))";
+	char* test2 = "((ab|cd)*(wx|yz))";
 	char* testTransformed = ss::preprocess_infix(test);
 
 	//if (testTransformed != nullptr)
@@ -99,7 +99,7 @@ int main()
 
 	//std::cout << ss::infix_to_postfix("a.b|c.d|x.y") << std::endl;
 	//std::cout << ss::infix_to_postfix("(a.b)|(c.d)|(x.y)") << std::endl;
-	std::cout << re2post(test) << std::endl;
+	std::cout << re2post(test2) << std::endl;
 	// ((a.b*.(c.d)*)|d.e*)|(a.d)*
 	return 0;
 }
@@ -115,3 +115,4 @@ int main()
 // ab(c*d)e
 // a(b*cd)|ef and a.(b*.c.d)|e.f
 // ((ab|cd)*(wx|yz)) and ((a.b|c.d)*.(w.x|y.z))
+// ((a.b|cd)*(w.x|y.z))
