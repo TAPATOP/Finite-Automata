@@ -55,6 +55,7 @@ namespace ss
 	// - the given string is empty
 	// - the given string has an invalid character
 	// / adds explicit '.' operators
+	// / returns a dynamycally allocated char array
 	char* preprocess_infix(char* infix)
 	{
 		unsigned int index = 0;

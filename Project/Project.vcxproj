@@ -150,6 +150,7 @@
     <ClCompile Include="StringStuff.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="LinkedList.h" />
     <ClInclude Include="Stack.h" />
     <ClInclude Include="StringStuff.h" />
   </ItemGroup>

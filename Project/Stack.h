@@ -293,11 +293,16 @@ void Stack<char>::push(char newEl)
 }
 
 //
-// pop
+// pops the highest element
+// / returns 'true' or 'false' depending on if there was a popped element
 bool Stack<char>::pop()
 {
-	if (isEmpty())
-		return 0;
+	// i'd rather skip this because every time I try popping a stack in the main program I first check whether it's empty or not
+	// and on top of that if i dont check that outside, I'll then have to check whether
+	// the pointer is null or not, e.g. an extra check
+	
+	//if (isEmpty())
+	//	return 0;
 
 	position--;
 	return 1;
@@ -305,10 +310,10 @@ bool Stack<char>::pop()
 }
 
 //
-// top
+// / returns the value of the last inserted element WITHOUT POPPING it
 char Stack<char>::top() const
 {
-	// i'd rather skip this because every time I try popping a stack I first check whether it's empty or not
+	// i'd rather skip this because every time I try popping a stack in the main program I first check whether it's empty or not
 	// and on top of that if i dont check that outside, I'll then have to check whether
 	// the pointer is null or not, e.g. an extra check
 	// if (isEmpty()) return nullptr;
