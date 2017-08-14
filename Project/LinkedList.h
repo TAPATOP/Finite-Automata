@@ -10,23 +10,20 @@ public:
 
 	void enqueue(T*);
 	T* dequeue();
+	void concatenate_to_me(LinkedList<T>*& followingList);
 
-	void printAll();
+	bool is_empty();
+
+	void print_all();
 	
 	~LinkedList();
 private:
 	struct Node
 	{
-		Node()
+		Node(T* data)
 		{
+			this->data = data;
 			next = nullptr;
-		}
-		~Node()
-		{
-			if (next != nullptr)
-			{
-				delete next;
-			}
 		}
 		T* data;
 		Node* next;
@@ -39,42 +36,71 @@ private:
 template <class T>
 LinkedList<T>::LinkedList()
 {
-	first = new Node();
-	last = first;
+	first = nullptr;
+	last = nullptr;
 }
 
 template <class T>
 LinkedList<T>::LinkedList(T* val)
 {
-	first = new Node();
-	first->data = val;
+	first = new Node(val);
 
-	last = new Node();
-	first->next = last;
+	last = first;
 }
 
 template <class T>
 void LinkedList<T>::enqueue(T* addMe)
 {
-	last->data = addMe;
-	Node* newNode = new Node();
-	last->next = newNode;
+	Node* newNode = new Node(addMe);
+	if (last != nullptr)
+	{
+		last->next = newNode;
+	}
+
 	last = newNode;
+	
+
+	if (first == nullptr)
+	{
+		first = last;
+	}
 }
 
 template<class T>
-inline T * LinkedList<T>::dequeue()
+T* LinkedList<T>::dequeue()
 {
-	Node* returnedOne = first;
-	first = first->next;
+	T* returnedData = first->data;
+	Node* nextNode = first->next;
 
-	return returnedOne->data;
+	delete first;
+
+	first = nextNode;
+
+	return returnedData;
+}
+
+// makes the last node of this list point to the first node of the followingList
+// !! WARNING !!
+// This makes the followingList's pointer nullptr in order to prevent memory coruption when deleting
+template<class T>
+void LinkedList<T>::concatenate_to_me(LinkedList<T>*& followingList)
+{
+	this->last->next = followingList->first;
+	this->last = followingList->last;
+
+	followingList = nullptr;
+}
+
+template<class T>
+inline bool LinkedList<T>::is_empty()
+{
+	return first == nullptr;
 }
 
 // prints all the entries in the list;
 // the data must have a predefined << operator
 template <class T>
-void LinkedList<T>::printAll()
+void LinkedList<T>::print_all()
 {
 	if (first == last)
 	{
@@ -91,16 +117,12 @@ void LinkedList<T>::printAll()
 template <class T>
 LinkedList<T>::~LinkedList()
 {
-	// recursive delete
-	if (first != nullptr) delete first;
+	Node* current = first;
 
-	// non- recursive delete; make sure you fix ~Node() before you uncomment this
-
-	//resetCurrent();
-	//while(current->next != nullptr)
-	//{
-	//	Node* nextNode = current->next;
-	//	delete current;
-	//	current = nextNode;
-	//}
+	while(current != nullptr)
+	{
+		Node* nextNode = current->next;
+		delete current;
+		current = nextNode;
+	}
 }

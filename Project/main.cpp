@@ -1,32 +1,39 @@
 #include <iostream>
 
+#include "Automata.h"
 #include "LinkedList.h"
 #include "Stack.h"
+#include "State.h"
 #include "StringStuff.h"
-enum StateTransitionCodes
-{
-	Split = 127,
-	Match,
-	Digit,
-	Letter
-};
-
-struct State
-{
-	unsigned short transitionCharacter = 0;
-	State* next = nullptr;
-	State* next2 = nullptr;
-	int listID = -1;
-};
-
-struct Automata
-{
-	State* startState = nullptr;
-	LinkedList<State*> endStates;
-};
 
 int main(int argc, char** argv)
 {
+	LinkedList<int> a;
+
+	int test1 = 1;
+	int test2 = 2;
+	int test3 = 3;
+	a.enqueue(&test1);
+	a.enqueue(&test2);
+	a.enqueue(&test3);
+
+	LinkedList<int>* b = new LinkedList<int>;
+
+	b->enqueue(&test1);
+	b->enqueue(&test2);
+	b->enqueue(&test3);
+
+	a.concatenate_to_me(b);
+
+	if(!a.is_empty()) std::cout << *(a.dequeue()) << std::endl;
+	if (!a.is_empty()) std::cout << *(a.dequeue()) << std::endl;
+	if (!a.is_empty()) std::cout << *(a.dequeue()) << std::endl;
+	if (!a.is_empty()) std::cout << *(a.dequeue()) << std::endl;
+
+
+
+	//Automata alpha;
+
 	argv[1] = "file.txt";
 	argv[2] = "?{!";
 	argc = 3;
@@ -42,6 +49,12 @@ int main(int argc, char** argv)
 
 	std::cout << postfix << std::endl;
 
+	int index = 0;
+	//Stack<
+	do
+	{
+		// if()
+	} while (postfix[index++]);
 	return 0;
 }
 
