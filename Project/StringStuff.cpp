@@ -40,6 +40,22 @@ namespace ss
 	}
 
 
+	bool can_escape(char c)
+	{
+		switch (c)
+		{
+		case 'a':
+		case 'e':
+		case 's':
+		case 'd':
+		case '\\':
+			return 1;
+			break;
+		}
+		return 0;
+	}
+
+
 	char* preprocess_infix(char* infix)
 	{
 		unsigned int index = 0;
@@ -49,7 +65,7 @@ namespace ss
 
 		if (newSize == 0)
 		{
-			return nullptr;
+			return nullptr; // should be made a bit different
 		}
 		///////////////////////
 		// ADD EXPLICIT OPERATORS part
@@ -57,14 +73,44 @@ namespace ss
 
 		// counts the number of legit characters so we know how much
 		// we might have to expand the string in order to fit the new explicit '.' operators
+		int currentSymbolType = 0;
+		bool lastSymbolWasSpecial = 0;
 		while (infix[index])
 		{
 			if (infix == nullptr) return nullptr;
 
-			if (symbol_type(infix[index]) == 3)
+			currentSymbolType = symbol_type(infix[index]);
+			if (currentSymbolType == 3)
 			{
 				++newSize;
+				lastSymbolWasSpecial = 0;
 			}
+			else
+			{
+				if (currentSymbolType == 2)
+				{
+					if (lastSymbolWasSpecial == 1)
+					{
+						lastSymbolWasSpecial = 0;
+						++newSize;
+					}
+					else
+					{
+						lastSymbolWasSpecial = 1;
+					}
+				}
+				else
+				{
+					// if you get to this points it means the symbol is either an operator or unknown
+					if (lastSymbolWasSpecial)
+					{
+						std::cout << "You can't escape this character !!11" << std::endl;
+						return nullptr;
+					}
+					lastSymbolWasSpecial = 0;
+				}
+			}
+
 			index++;
 		}
 
@@ -73,12 +119,12 @@ namespace ss
 		char* newInfix = new char[newSize + 1];
 		unsigned int newIndex = 0;
 
-		newInfix[newIndex++] = infix[0];
+		newInfix[newIndex++] = decapitalize_char(infix[0]);
 
 		index = 0;
 
 		int lastSymbolType = symbol_type(infix[index++]);
-		int currentSymbolType = 0;
+		currentSymbolType = 0;
 
 		// makes sure the first symbol is valid
 		if (lastSymbolType == 0)
@@ -113,7 +159,7 @@ namespace ss
 				newInfix[newIndex++] = '.';
 			}
 
-			newInfix[newIndex++] = infix[index];
+			newInfix[newIndex++] = decapitalize_char(infix[index]);
 
 			lastSymbolType = currentSymbolType;
 			index++;
@@ -227,5 +273,16 @@ namespace ss
 		}
 		postfix[pIndex] = 0;
 		return postfix;
+	}
+	
+	
+	char decapitalize_char(char symbol)
+
+	{
+		if (symbol >= 'A' && symbol <= 'Z')
+		{
+			return symbol + ('a' - 'A');
+		}
+		return symbol;
 	}
 };

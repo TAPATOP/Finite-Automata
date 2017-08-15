@@ -17,11 +17,13 @@ namespace ss
 	// / 3 -> operand/ base symbol: pretty much anything else
 	int symbol_type(char c);
 
+	bool can_escape(char c);
 
 	// / checks validity of input
 	// returns nullptr if:
 	// - the given string is empty
 	// - the given string has an invalid character
+	// - the given string had an escape character infront of something you can't escape
 	// / adds explicit '.' operators
 	// / returns a dynamycally allocated char array
 	char* preprocess_infix(char* infix);
@@ -33,4 +35,8 @@ namespace ss
 	// returns nullptr if:
 	// - the brackets don't match
 	char* infix_to_postfix(char* infix);
+
+	// decapitalizes the given symbol if it's a captal letter
+	// or just returns it if it's not
+	char decapitalize_char(char symbol);
 };

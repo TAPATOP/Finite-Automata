@@ -4,6 +4,8 @@ enum StateTransitionCodes
 {
 	Digit = 127,
 	Letter,
+	Space,
+	Empty,
 	Split,
 	Match
 };

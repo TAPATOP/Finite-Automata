@@ -9,7 +9,8 @@
 int main(int argc, char** argv)
 {
 	argv[1] = "file.txt";
-	argv[2] = "((a.b*(cd)*)|de*)|(a.d)*";
+	argv[2] = "\\ab\\cde\\\\";
+
 	argc = 3;
 
 	///////////////////////////////
@@ -60,7 +61,6 @@ int main(int argc, char** argv)
 			case '.':
 				a2 = automataStack.topNpop();
 				a1 = automataStack.topNpop();
-
 				a1->concatenate_with(a2);
 
 				automataStack.push(a1);
@@ -115,3 +115,6 @@ int main(int argc, char** argv)
 // (a|b)*|de
 // (a*|b*)|de + manual check via debugger if ending nodes( ones where next == nullptr) are in the ending list
 // ((a.b*(cd)*)|de*)|(a.d)* + same as above
+
+// / ss::decapitalize_char()
+// ((a.B*(cd)*)|de*)|(a.d)*
