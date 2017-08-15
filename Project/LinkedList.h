@@ -2,16 +2,17 @@
 #include<iostream>
 
 // stores the objects by saving their values by value
+// e.g. if you want to store a big object, you should use LinkedList<Object*>
 template <class T>
 class LinkedList
 {
 public:
 	LinkedList();
-	LinkedList(T*);
+	LinkedList(T);
 
-	void enqueue(T*);
-	T* dequeue();
-	void concatenate_to_me(LinkedList<T>*& followingList);
+	void enqueue(T);
+	T dequeue();
+	void concatenate_with(LinkedList<T>*& followingList);
 
 	bool is_empty();
 
@@ -21,12 +22,12 @@ public:
 private:
 	struct Node
 	{
-		Node(T* data)
+		Node(T data)
 		{
 			this->data = data;
 			next = nullptr;
 		}
-		T* data;
+		T data;
 		Node* next;
 	};
 
@@ -42,7 +43,7 @@ LinkedList<T>::LinkedList()
 }
 
 template <class T>
-LinkedList<T>::LinkedList(T* val)
+LinkedList<T>::LinkedList(T val)
 {
 	first = new Node(val);
 
@@ -50,7 +51,7 @@ LinkedList<T>::LinkedList(T* val)
 }
 
 template <class T>
-void LinkedList<T>::enqueue(T* addMe)
+void LinkedList<T>::enqueue(T addMe)
 {
 	Node* newNode = new Node(addMe);
 	if (last != nullptr)
@@ -68,7 +69,7 @@ void LinkedList<T>::enqueue(T* addMe)
 }
 
 template<class T>
-T* LinkedList<T>::dequeue()
+T LinkedList<T>::dequeue()
 {
 	T* returnedData = first->data;
 	Node* nextNode = first->next;
@@ -80,20 +81,23 @@ T* LinkedList<T>::dequeue()
 	return returnedData;
 }
 
-// makes the last node of this list point to the first node of the followingList
+// makes the last node of this list point to the first node of the followingList;
+// e.g. connects the end of our list with the beginning of the following one
 // !! WARNING !!
-// This makes the followingList's pointer nullptr in order to prevent memory coruption when deleting
+// This makes the followingList's pointer nullptr in order to prevent memory corruption when deleting
+// and then deletes it : )
 template<class T>
-void LinkedList<T>::concatenate_to_me(LinkedList<T>*& followingList)
+void LinkedList<T>::concatenate_with(LinkedList<T>*& followingList)
 {
 	this->last->next = followingList->first;
 	this->last = followingList->last;
 
 	followingList = nullptr;
+	delete followingList;
 }
 
 template<class T>
-inline bool LinkedList<T>::is_empty()
+bool LinkedList<T>::is_empty()
 {
 	return first == nullptr;
 }

@@ -9,10 +9,18 @@
 int main(int argc, char** argv)
 {
 	State* a = new State('a');
-	LinkedList<State>* list = new LinkedList<State> (a->next);
+	LinkedList<State*>* list = new LinkedList<State*> (a->next);
 	Automata* alpha = new Automata(a, list);
 
-	delete alpha;
+	Stack<int> beta(5);
+	beta.push(8);
+	beta.push(69);
+
+	Stack<int> gamma = beta;
+
+	beta.push(1488);
+
+	gamma.visualize();
 
 	argv[1] = "file.txt";
 	argv[2] = "((a|b)|(c|d))|(e|f)";

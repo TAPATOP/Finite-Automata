@@ -2,15 +2,21 @@
 
 
 
-Automata::Automata(State * startState, LinkedList<State>* outArrowsList)
+Automata::Automata()
+{
+	startState = nullptr;
+	outArrowsList = nullptr;
+}
+
+Automata::Automata(State* startState, LinkedList<State*>* outArrowsList)
 {
 	this->startState = startState;
 	this->outArrowsList = outArrowsList;
 }
 
-void Automata::concatenate_to_me(Automata * followingAutomata)
+void Automata::concatenate_with(Automata* followingAutomata)
 {
-	this->outArrowsList->concatenate_to_me(followingAutomata->outArrowsList);
+	this->outArrowsList->concatenate_with(followingAutomata->outArrowsList);
 }
 
 Automata::~Automata()
