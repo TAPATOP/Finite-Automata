@@ -17,7 +17,10 @@ namespace ss
 	// / 3 -> operand/ base symbol: pretty much anything else
 	int symbol_type(char c);
 
+	// tells whether the given character has an escape sequence assosiated with it
+	// returns true for: 'e', 'a', 'd', 's' and '\\'
 	bool can_escape(char c);
+
 
 	// / checks validity of input
 	// returns nullptr if:
@@ -36,7 +39,12 @@ namespace ss
 	// - the brackets don't match
 	char* infix_to_postfix(char* infix);
 
+
 	// decapitalizes the given symbol if it's a captal letter
 	// or just returns it if it's not
 	char decapitalize_char(char symbol);
+
+	// decapitalizes the given letter;
+	// returns the symbol itself if it cannot be decapitalized
+	char capitalize_char(char symbol);
 };

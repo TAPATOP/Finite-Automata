@@ -9,7 +9,7 @@
 int main(int argc, char** argv)
 {
 	argv[1] = "file.txt";
-	argv[2] = "\\ab\\cde\\\\";
+	argv[2] = "(a|\\s)*|(\\\\|\\d)(\\\\\\a)";
 
 	argc = 3;
 
@@ -97,11 +97,22 @@ int main(int argc, char** argv)
 // ((a.b*.(c.d)*)|d.e*)|(a.d)*
 // (a.b)|(c.d)|(x.y) and a.b|c.d|x.y
 
-// / preprocess_infix() testing + testing results in infix_to_postfix()
+// / preprocess_infix() testing( + testing results in infix_to_postfix())
 // ab(c*d)e
 // a(b*cd)|ef and a.(b*.c.d)|e.f
 // ((ab|cd)*(wx|yz)) and ((a.b|c.d)*.(w.x|y.z))
 // ((a.b|cd)*(w.x|y.z))
+// (a.b)*|(d*e)*
+//
+// / escapes testing
+// \\ab\\cde\\\\ and \\\\\\\\\\\\ -> whether preprocess_infix() would allocate enough memory
+// ab|\\d.c
+// \\ -> doesnt add anything and doesnt blow up => success
+// a.d.\\s.\\\\.e.\\\\.\\d -> same as above
+// ad\\s\\\\e\\\\\\d
+// ab\\s\\\\*f
+// (a|\\s)*|(\\\\|\\w)(\\\\\\a)
+// (a|\\s)*|(\\\\|\\d)(\\\\\\a) -> tests for valid capitalization of escaped letters without messing stuff up
 
 // /LinkedList
 // while(true) {multiple enqueues and dequeues}

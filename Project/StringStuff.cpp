@@ -89,6 +89,8 @@ namespace ss
 			{
 				if (currentSymbolType == 2)
 				{
+					// if both the last and current symbols were '\\' then we have a
+					// '\\' in the role of an operand
 					if (lastSymbolWasSpecial == 1)
 					{
 						lastSymbolWasSpecial = 0;
@@ -135,6 +137,8 @@ namespace ss
 
 		// operator adding part //
 
+		lastSymbolWasSpecial = 0;
+
 		while (infix[index])
 		{
 			currentSymbolType = symbol_type(infix[index]);
@@ -146,21 +150,54 @@ namespace ss
 				return nullptr;
 			}
 
+			// checks for a specific case
 			if (infix[index - 1] == '(' && infix[index] == ')')
 			{
 				std::cout << "I don't understand what to do with \"()\" : (" << std::endl;
 				return nullptr;
 			}
 
-			// if an operand, postfix operator(*) or closing bracket are followed by either an opening bracket
+			// if an operand, postfix(unary) operator(*) or closing bracket are followed by either an opening bracket
 			// or another operand, then there is no operator between the two, so we need to add an explicit one
-			if ((lastSymbolType == 3 || infix[index - 1] == '*' || infix[index - 1] == ')') && (infix[index] == '(' || currentSymbolType == 3))
+			if ((lastSymbolType == 3 || infix[index - 1] == '*' || infix[index - 1] == ')') && // last symbol
+				(infix[index] == '(' || currentSymbolType == 3 || currentSymbolType == 2)) // current symbol
 			{
 				newInfix[newIndex++] = '.';
 			}
 
-			newInfix[newIndex++] = decapitalize_char(infix[index]);
+			// this does the same but separating them makes the code a bit more readable?
+			// if both the last and current symbols are '\\', add an operator, since we have a '\\' operand
+			if (index > 1 && symbol_type(newInfix[newIndex - 2]) == 2 && symbol_type(newInfix[newIndex - 1]) == 2 &&
+				(infix[index] == '(' || currentSymbolType == 3 || currentSymbolType == 2))
+			{
+				newInfix[newIndex++] = '.';
+			}
+			char newChar = decapitalize_char(infix[index]);
 
+			if (!lastSymbolWasSpecial)
+			{
+				newInfix[newIndex++] = newChar;
+				if (symbol_type(newChar) == 2)
+				{
+					lastSymbolWasSpecial = 1;
+				}
+			}
+			else
+			{
+				if (!can_escape(newChar))
+				{
+					std::cout << "You cannot escape this symbol!" << std::endl;
+					return nullptr;
+				}
+
+				lastSymbolWasSpecial = 0;
+				if (symbol_type(newInfix[newIndex - 1]) != 2)
+				{
+					newIndex++;
+				}
+				newInfix[newIndex - 1] = capitalize_char(newChar);
+			}
+			
 			lastSymbolType = currentSymbolType;
 			index++;
 		}
@@ -282,6 +319,15 @@ namespace ss
 		if (symbol >= 'A' && symbol <= 'Z')
 		{
 			return symbol + ('a' - 'A');
+		}
+		return symbol;
+	}
+
+	char capitalize_char(char symbol)
+	{
+		if (symbol >= 'a' && symbol <= 'z')
+		{
+			return symbol - ('a' - 'A');
 		}
 		return symbol;
 	}
