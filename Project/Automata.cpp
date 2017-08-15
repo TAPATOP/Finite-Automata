@@ -46,6 +46,15 @@ void Automata::iterate()
 	}
 
 	startState = newState;
+	outStatesList->enqueue(newState);
+}
+
+void Automata::alternate_with(Automata* alternateAutomata)
+{
+	State* newState = new State(StateTransitionCodes::Split, this->startState, alternateAutomata->startState);
+	startState = newState;
+	this->outStatesList->concatenate_with(alternateAutomata->outStatesList);
+	delete alternateAutomata;
 }
 
 Automata::~Automata()

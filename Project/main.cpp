@@ -9,7 +9,7 @@
 int main(int argc, char** argv)
 {
 	argv[1] = "file.txt";
-	argv[2] = "a*";
+	argv[2] = "((a.b*(cd)*)|de*)|(a.d)*";
 	argc = 3;
 
 	char* postfix = ss::infix_to_postfix(argv[2]);
@@ -63,6 +63,13 @@ int main(int argc, char** argv)
 
 				automataStack.push(a1);
 				break;
+			case '|':
+				a2 = automataStack.topNpop();
+				a1 = automataStack.topNpop();
+				a1->alternate_with(a2);
+
+				automataStack.push(a1);
+				break;
 			}
 			break;
 		}
@@ -86,3 +93,15 @@ int main(int argc, char** argv)
 // a(b*cd)|ef and a.(b*.c.d)|e.f
 // ((ab|cd)*(wx|yz)) and ((a.b|c.d)*.(w.x|y.z))
 // ((a.b|cd)*(w.x|y.z))
+
+// /LinkedList
+// while(true) {multiple enqueues and dequeues}
+
+// / Automaton build testing
+// ab
+// abcde
+// ab*
+// (ab)*
+// a|b
+// (a|b)*|de
+// (a*|b*)|de + manual check via debugger if ending nodes( ones where next == nullptr) are in the ending list
