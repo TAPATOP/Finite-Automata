@@ -21,3 +21,5 @@ struct State
 
 	~State();
 };
+
+int get_state_transition_value_by_char(char c);

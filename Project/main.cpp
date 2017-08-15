@@ -9,8 +9,8 @@
 int main(int argc, char** argv)
 {
 	argv[1] = "file.txt";
-	argv[2] = "(a|\\s)*|(\\\\|\\d)(\\\\\\a)";
-
+	argv[2] = "\\\\\\\\\\\\";
+	
 	argc = 3;
 
 	///////////////////////////////
@@ -49,8 +49,9 @@ int main(int argc, char** argv)
 
 		switch (currSymbolType)
 		{
+		case 2:
 		case 3:
-			stateToPush = new State(currSymbol);
+			stateToPush = new State(get_state_transition_value_by_char(currSymbol));
 			
 			automataToPush = new Automata(stateToPush, new LinkedList<State*>(stateToPush));
 			automataStack.push(automataToPush);
@@ -60,12 +61,22 @@ int main(int argc, char** argv)
 			{
 			case '.':
 				a2 = automataStack.topNpop();
+				if (automataStack.isEmpty())
+				{
+					std::cout << "Error with operator count or positioning" << std::endl;
+					return 2;
+				}
 				a1 = automataStack.topNpop();
 				a1->concatenate_with(a2);
 
 				automataStack.push(a1);
 				break;
 			case '*':
+				if (automataStack.isEmpty())
+				{
+					std::cout << "Error with operator count or positioning" << std::endl;
+					return 2;
+				}
 				a1 = automataStack.topNpop();
 				a1->iterate();
 
@@ -73,6 +84,11 @@ int main(int argc, char** argv)
 				break;
 			case '|':
 				a2 = automataStack.topNpop();
+				if (automataStack.isEmpty())
+				{
+					std::cout << "Error with operator count or positioning" << std::endl;
+					return 2;
+				}
 				a1 = automataStack.topNpop();
 				a1->alternate_with(a2);
 
@@ -126,6 +142,8 @@ int main(int argc, char** argv)
 // (a|b)*|de
 // (a*|b*)|de + manual check via debugger if ending nodes( ones where next == nullptr) are in the ending list
 // ((a.b*(cd)*)|de*)|(a.d)* + same as above
+// (a||\\s)*|(\\\\|\\d)(\\\\\\a) -> printed error and stopped program => great
+// \\\\\\\\\\\\
 
 // / ss::decapitalize_char()
 // ((a.B*(cd)*)|de*)|(a.d)*

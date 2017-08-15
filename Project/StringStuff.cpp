@@ -61,11 +61,14 @@ namespace ss
 		unsigned int index = 0;
 		unsigned int newSize = strlen(infix);
 
+
+		if (infix == nullptr) return nullptr;
+
 		// checks if string is empty //
 
 		if (newSize == 0)
 		{
-			return nullptr; // should be made a bit different
+			return nullptr; // TODO: should be made a bit different
 		}
 		///////////////////////
 		// ADD EXPLICIT OPERATORS part
@@ -77,7 +80,7 @@ namespace ss
 		bool lastSymbolWasSpecial = 0;
 		while (infix[index])
 		{
-			if (infix == nullptr) return nullptr;
+			// if (infix == nullptr) return nullptr; // TODO: why did i put this here??
 
 			currentSymbolType = symbol_type(infix[index]);
 			if (currentSymbolType == 3)
@@ -106,7 +109,7 @@ namespace ss
 					// if you get to this points it means the symbol is either an operator or unknown
 					if (lastSymbolWasSpecial)
 					{
-						std::cout << "You can't escape this character !!11" << std::endl;
+						std::cout << "You can't escape operators or unknown characters" << std::endl;
 						return nullptr;
 					}
 					lastSymbolWasSpecial = 0;
@@ -136,8 +139,14 @@ namespace ss
 		}
 
 		// operator adding part //
-
-		lastSymbolWasSpecial = 0;
+		if (lastSymbolType == 2)
+		{
+			lastSymbolWasSpecial = 1;
+		}
+		else
+		{
+			lastSymbolWasSpecial = 0;
+		}
 
 		while (infix[index])
 		{
@@ -165,9 +174,9 @@ namespace ss
 				newInfix[newIndex++] = '.';
 			}
 
-			// this does the same but separating them makes the code a bit more readable?
+			// this if does the same as the one above but separating them makes the code a bit more readable?
 			// if both the last and current symbols are '\\', add an operator, since we have a '\\' operand
-			if (index > 1 && symbol_type(newInfix[newIndex - 2]) == 2 && symbol_type(newInfix[newIndex - 1]) == 2 &&
+			if (newIndex > 1 && symbol_type(newInfix[newIndex - 2]) == 2 && symbol_type(newInfix[newIndex - 1]) == 2 &&
 				(infix[index] == '(' || currentSymbolType == 3 || currentSymbolType == 2))
 			{
 				newInfix[newIndex++] = '.';
@@ -184,6 +193,8 @@ namespace ss
 			}
 			else
 			{
+				// saves the escaped symbols by capitalizing them and overwriting
+				// the escaping '\\'
 				if (!can_escape(newChar))
 				{
 					std::cout << "You cannot escape this symbol!" << std::endl;
@@ -225,9 +236,9 @@ namespace ss
 			return nullptr;
 		}
 
-		char* postfix = new char[maxSize + 1];
+		char* postfix = new char[infixSize + 1];
 
-		Stack<char> stack(maxSize);
+		Stack<char> stack(infixSize);
 
 		int iIndex = 0;
 		int pIndex = 0;
@@ -238,7 +249,7 @@ namespace ss
 			currentSymbol = infix[iIndex++];
 			int charType = symbol_type(currentSymbol);
 
-			if (charType == 3)
+			if (charType == 3 || charType == 2)
 			{
 				postfix[pIndex++] = currentSymbol;
 				continue;
@@ -322,6 +333,7 @@ namespace ss
 		}
 		return symbol;
 	}
+
 
 	char capitalize_char(char symbol)
 	{
