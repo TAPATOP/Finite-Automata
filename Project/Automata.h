@@ -6,12 +6,13 @@
 class Automata
 {
 public:
-	Automata(State* startState, LinkedList<State*> outArrows);
+	Automata(State* startState, LinkedList<State>* outArrowsList);
 
 	void concatenate_to_me(Automata* followingAutomata);
 
 	~Automata();
 private:
 	State* startState = nullptr;
-	LinkedList<State*> outArrows;
+	LinkedList<State>* outArrowsList;
 };
+

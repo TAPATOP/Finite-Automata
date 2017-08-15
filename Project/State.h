@@ -10,7 +10,7 @@ enum StateTransitionCodes
 
 struct State
 {
-	State(int transitionCharacter, State* first, State* second = nullptr);
+	State(int transitionCharacter, State* first = nullptr, State* second = nullptr);
 
 	unsigned short transitionCharacter = 0;
 	State* next = nullptr;

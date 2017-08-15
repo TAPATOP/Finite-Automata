@@ -1,6 +1,7 @@
 #pragma once
 #include<iostream>
 
+// stores the objects by saving their values by value
 template <class T>
 class LinkedList
 {

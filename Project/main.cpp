@@ -8,34 +8,14 @@
 
 int main(int argc, char** argv)
 {
-	LinkedList<int> a;
+	State* a = new State('a');
+	LinkedList<State>* list = new LinkedList<State> (a->next);
+	Automata* alpha = new Automata(a, list);
 
-	int test1 = 1;
-	int test2 = 2;
-	int test3 = 3;
-	a.enqueue(&test1);
-	a.enqueue(&test2);
-	a.enqueue(&test3);
-
-	LinkedList<int>* b = new LinkedList<int>;
-
-	b->enqueue(&test1);
-	b->enqueue(&test2);
-	b->enqueue(&test3);
-
-	a.concatenate_to_me(b);
-
-	if(!a.is_empty()) std::cout << *(a.dequeue()) << std::endl;
-	if (!a.is_empty()) std::cout << *(a.dequeue()) << std::endl;
-	if (!a.is_empty()) std::cout << *(a.dequeue()) << std::endl;
-	if (!a.is_empty()) std::cout << *(a.dequeue()) << std::endl;
-
-
-
-	//Automata alpha;
+	delete alpha;
 
 	argv[1] = "file.txt";
-	argv[2] = "?{!";
+	argv[2] = "((a|b)|(c|d))|(e|f)";
 	argc = 3;
 
 	char* postfix = ss::infix_to_postfix(argv[2]);
@@ -50,10 +30,25 @@ int main(int argc, char** argv)
 	std::cout << postfix << std::endl;
 
 	int index = 0;
-	//Stack<
+	int currSymbolType = 0;
+	char currSymbol = 0;
+
+	Stack<Automata> autoStack;
+	
 	do
 	{
-		// if()
+		currSymbolType = ss::symbol_type(postfix[index]);
+		currSymbol = postfix[index];
+
+		switch (currSymbolType)
+		{
+		case 3:
+			State* stateToPush = new State(currSymbol);
+			//Automata* automataToPush = new Automata(stateToPush, )
+			//autoStack.push();
+			break;
+		}
+
 	} while (postfix[index++]);
 	return 0;
 }
