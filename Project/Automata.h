@@ -23,10 +23,17 @@ public:
 	// the concatenation has taken place( since, technically, you have >merged< two Automatas into one
 	void concatenate_with(Automata* followingAutomata);
 
+	
 	// creates a new SPLIT state, connects it with the startingState of the Automata,
 	// connects the ending states with it and adds it to outStatesList
 	void iterate();
 
+
+	// creates a new SPLIT state, makes it the startingState of the Automata, 
+	// connects the endingStates lists of the two automatas
+	// !!! WARNING !!!
+	// Destroys the alternateAutomata because you should not be able to access it directly after
+	// the alternation has taken place( since, technically, you have >merged< two Automatas into one
 	void alternate_with(Automata* alternateAutomata);
 
 	//void destroy_machine();

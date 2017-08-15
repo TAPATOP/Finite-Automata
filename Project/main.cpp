@@ -12,6 +12,10 @@ int main(int argc, char** argv)
 	argv[2] = "((a.b*(cd)*)|de*)|(a.d)*";
 	argc = 3;
 
+	///////////////////////////////
+	// REGEX PREPROCESSING 
+	//////////////////////////////
+
 	char* postfix = ss::infix_to_postfix(argv[2]);
 
 	// checks if preprocess_infix() or infix_to_postfix() have found an error;
@@ -22,6 +26,10 @@ int main(int argc, char** argv)
 	}
 
 	std::cout << postfix << std::endl;
+
+	/////////////////////
+	// AUTOMATA BUILDING
+	/////////////////////
 
 	int index = 0;
 	int currSymbolType = 0;
@@ -75,6 +83,7 @@ int main(int argc, char** argv)
 		}
 
 	} while (postfix[index++]);
+
 	return 0;
 }
 
@@ -105,3 +114,4 @@ int main(int argc, char** argv)
 // a|b
 // (a|b)*|de
 // (a*|b*)|de + manual check via debugger if ending nodes( ones where next == nullptr) are in the ending list
+// ((a.b*(cd)*)|de*)|(a.d)* + same as above
