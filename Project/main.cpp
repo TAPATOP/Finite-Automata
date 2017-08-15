@@ -9,7 +9,7 @@
 int main(int argc, char** argv)
 {
 	argv[1] = "file.txt";
-	argv[2] = "abcde";
+	argv[2] = "a*";
 	argc = 3;
 
 	char* postfix = ss::infix_to_postfix(argv[2]);
@@ -30,6 +30,9 @@ int main(int argc, char** argv)
 	Stack<Automata*> automataStack;
 	State* stateToPush = nullptr;
 	Automata* automataToPush = nullptr;
+	Automata* a1 = nullptr;
+	Automata* a2 = nullptr;
+
 	do
 	{
 		currSymbolType = ss::symbol_type(postfix[index]);
@@ -47,10 +50,16 @@ int main(int argc, char** argv)
 			switch (currSymbol)
 			{
 			case '.':
-				Automata* a2 = automataStack.topNpop();
-				Automata* a1 = automataStack.topNpop();
+				a2 = automataStack.topNpop();
+				a1 = automataStack.topNpop();
 
 				a1->concatenate_with(a2);
+
+				automataStack.push(a1);
+				break;
+			case '*':
+				a1 = automataStack.topNpop();
+				a1->iterate();
 
 				automataStack.push(a1);
 				break;

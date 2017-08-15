@@ -14,12 +14,6 @@ Automata::Automata(State* startState, LinkedList<State*>* outStatesList)
 	this->outStatesList = outStatesList;
 }
 
-// makes all the outStates of the current Automata point towards
-// the beginning of the followingAutomata and makes the followingAutomata's
-// outStatesList the new outArrowList of the current Automata by copying it's address
-// !!! WARNING !!!
-// Destroys the followingAutomata because you should not be able to access it directly after
-// the concatenation has taken place( since, technically, you have >merged< two Automatas into one
 void Automata::concatenate_with(Automata* followingAutomata)
 {
 	LinkedList<State*>::Node* node = this->outStatesList->grant_access_to_first();
@@ -37,6 +31,21 @@ void Automata::concatenate_with(Automata* followingAutomata)
 
 	this->outStatesList = followingAutomata->outStatesList;
 	delete followingAutomata;
+}
+
+void Automata::iterate()
+{
+	State* newState = new State(StateTransitionCodes::Split, nullptr, this->startState);
+
+	State* state = nullptr;
+
+	while (!outStatesList->is_empty())
+	{
+		state = outStatesList->dequeue();
+		state->next = newState;
+	}
+
+	startState = newState;
 }
 
 Automata::~Automata()
