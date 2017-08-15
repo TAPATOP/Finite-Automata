@@ -76,6 +76,11 @@ T LinkedList<T>::dequeue()
 	T returnedData = first->data;
 	Node* nextNode = first->next;
 
+	if (first == last)
+	{
+		last = nullptr;
+	}
+
 	delete first;
 
 	first = nextNode;
