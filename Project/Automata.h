@@ -12,13 +12,15 @@ class Automata
 {
 public:
 	Automata();
-	Automata(State* startState, LinkedList<State*>* outArrowsList);
+	Automata(State* startState, LinkedList<State*>* outStatesList);
 
 	void concatenate_with(Automata* followingAutomata);
+
+	//void destroy_machine();
 
 	~Automata();
 private:
 	State* startState;
-	LinkedList<State*>* outArrowsList;
+	LinkedList<State*>* outStatesList;
 };
 

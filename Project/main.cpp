@@ -8,22 +8,8 @@
 
 int main(int argc, char** argv)
 {
-	State* a = new State('a');
-	LinkedList<State*>* list = new LinkedList<State*> (a->next);
-	Automata* alpha = new Automata(a, list);
-
-	Stack<int> beta(5);
-	beta.push(8);
-	beta.push(69);
-
-	Stack<int> gamma = beta;
-
-	beta.push(1488);
-
-	gamma.visualize();
-
 	argv[1] = "file.txt";
-	argv[2] = "((a|b)|(c|d))|(e|f)";
+	argv[2] = "abcde";
 	argc = 3;
 
 	char* postfix = ss::infix_to_postfix(argv[2]);
@@ -41,8 +27,9 @@ int main(int argc, char** argv)
 	int currSymbolType = 0;
 	char currSymbol = 0;
 
-	Stack<Automata> autoStack;
-	
+	Stack<Automata*> automataStack;
+	State* stateToPush = nullptr;
+	Automata* automataToPush = nullptr;
 	do
 	{
 		currSymbolType = ss::symbol_type(postfix[index]);
@@ -51,9 +38,23 @@ int main(int argc, char** argv)
 		switch (currSymbolType)
 		{
 		case 3:
-			State* stateToPush = new State(currSymbol);
-			//Automata* automataToPush = new Automata(stateToPush, )
-			//autoStack.push();
+			stateToPush = new State(currSymbol);
+			
+			automataToPush = new Automata(stateToPush, new LinkedList<State*>(stateToPush));
+			automataStack.push(automataToPush);
+			break;
+		case 1:
+			switch (currSymbol)
+			{
+			case '.':
+				Automata* a2 = automataStack.topNpop();
+				Automata* a1 = automataStack.topNpop();
+
+				a1->concatenate_with(a2);
+
+				automataStack.push(a1);
+				break;
+			}
 			break;
 		}
 

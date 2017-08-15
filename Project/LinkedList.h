@@ -7,19 +7,6 @@ template <class T>
 class LinkedList
 {
 public:
-	LinkedList();
-	LinkedList(T);
-
-	void enqueue(T);
-	T dequeue();
-	void concatenate_with(LinkedList<T>*& followingList);
-
-	bool is_empty();
-
-	void print_all();
-	
-	~LinkedList();
-private:
 	struct Node
 	{
 		Node(T data)
@@ -30,6 +17,21 @@ private:
 		T data;
 		Node* next;
 	};
+public:
+	LinkedList();
+	LinkedList(T);
+
+	void enqueue(T);
+	T dequeue();
+	void concatenate_with(LinkedList<T>*& followingList);
+	Node* grant_access_to_first();
+
+	bool is_empty();
+
+	void print_all();
+	
+	~LinkedList();
+private:
 
 	Node* first; // first node of the list
 	Node* last; // this is the address of the last node in the list, WHICH IS UNINITIALIZED
@@ -71,7 +73,7 @@ void LinkedList<T>::enqueue(T addMe)
 template<class T>
 T LinkedList<T>::dequeue()
 {
-	T* returnedData = first->data;
+	T returnedData = first->data;
 	Node* nextNode = first->next;
 
 	delete first;
@@ -94,6 +96,12 @@ void LinkedList<T>::concatenate_with(LinkedList<T>*& followingList)
 
 	followingList = nullptr;
 	delete followingList;
+}
+
+template<class T>
+typename LinkedList<T>::Node* LinkedList<T>::grant_access_to_first()
+{
+	return first;
 }
 
 template<class T>

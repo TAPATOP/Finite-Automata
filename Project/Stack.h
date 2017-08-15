@@ -16,11 +16,11 @@ public:
 	void visualize() const;
 	bool isEmpty() const;
 
-	Stack& operator=(Stack<TYPE> & Other);
+	Stack& operator=(Stack<TYPE>& Other);
 
 	~Stack();
 private:
-	void copyStack(Stack<TYPE> & other);
+	void copyStack(Stack<TYPE>& other);
 	void resize();
 private:
 	TYPE* data;
@@ -77,7 +77,6 @@ Stack<TYPE>::Stack(Stack& oldOne)
 {
 	copyStack(oldOne);
 }
-// TODO: test this
 
 template <typename TYPE>
 Stack<TYPE>& Stack<TYPE>::operator=(Stack<TYPE>& Other)
@@ -85,7 +84,6 @@ Stack<TYPE>& Stack<TYPE>::operator=(Stack<TYPE>& Other)
 	copyStack(Other);
 	return *this;
 } 
-// TODO: Test this
 
 //
 // push
@@ -153,7 +151,7 @@ void Stack<TYPE>::visualize() const
 }
 
 //
-// isEmpty
+// checks if all the data has been popped or if there has simply never been any data
 template <class TYPE>
 bool Stack<TYPE>::isEmpty() const
 {
@@ -192,192 +190,3 @@ Stack<TYPE>::~Stack()
 		delete[] data;
 	}
 }
-
-////////////////////////////////////////////////
-//// char SPECIALIZATION BELOW
-/////////////////////////////////////////////
-//
-//template <>
-//class Stack<char>
-//{
-//public:
-//	inline Stack();
-//	inline Stack(const int size);
-//	inline Stack(Stack<char> const &);
-//
-//	inline void push(char);
-//	inline bool pop();
-//	inline char top() const;
-//	inline char topNpop();
-//	inline void visualize() const;
-//	inline bool isEmpty() const;
-//
-//	inline Stack& operator=(Stack<char> const & Other);
-//
-//	inline ~Stack();
-//private:
-//	inline void copyStack(Stack<char> const & other);
-//	inline void resize();
-//private:
-//	char* data;
-//	int position;
-//	int MAX = 1;
-//};
-//
-//
-//
-/////////////////////////
-//// CLASS INTERFACE ENDS HERE
-////////////////////////
-//
-//
-//
-//Stack<char>::Stack()
-//{
-//	position = 0;
-//	data = new char[MAX];
-//}
-//
-//Stack<char>::Stack(const int size)
-//{
-//	position = 0;
-//	MAX = size;
-//	data = new char[MAX];
-//}
-//
-//void Stack<char>::copyStack(Stack<char> const &other)
-//{
-//	if (data != nullptr)
-//	{
-//		delete[] data;
-//	}
-//
-//	size_t oldPos = other.position;
-//	position = oldPos;
-//	data = new char[oldPos + 1];
-//
-//	for (unsigned int i = 0; i < oldPos; i++)
-//	{
-//		data[i] = other.data[i];
-//	}
-//}
-//
-//
-////
-//// copy constructor
-//Stack<char>::Stack(Stack<char> const & oldOne)
-//{
-//	copyStack(oldOne);
-//}
-//// TODO: test this
-//
-//Stack<char>& Stack<char>::operator=(Stack<char> const & Other)
-//{
-//	copyStack(Other);
-//	return *this;
-//}
-//// TODO: Test this
-//
-////
-//// push
-//void Stack<char>::push(char newEl)
-//{
-//	if (position == MAX)
-//	{
-//		resize();
-//	}
-//
-//	data[position] = newEl;
-//	position++;
-//}
-//
-////
-//// pops the highest element
-//// / returns 'true' or 'false' depending on if there was a popped element
-//bool Stack<char>::pop()
-//{
-//	// i'd rather skip this because every time I try popping a stack in the main program I first check whether it's empty or not
-//	// and on top of that if i dont check that outside, I'll then have to check whether
-//	// the pointer is null or not, e.g. an extra check
-//	
-//	//if (isEmpty())
-//	//	return 0;
-//
-//	position--;
-//	return 1;
-//
-//}
-//
-////
-//// / returns the value of the last inserted element WITHOUT POPPING it
-//char Stack<char>::top() const
-//{
-//	// i'd rather skip this because every time I try popping a stack in the main program I first check whether it's empty or not
-//	// and on top of that if i dont check that outside, I'll then have to check whether
-//	// the pointer is null or not, e.g. an extra check
-//	// if (isEmpty()) return nullptr;
-//
-//	return data[position - 1];
-//}
-//
-////
-//// top + pop
-//char Stack<char>::topNpop()
-//{
-//	// reason for commenting this explained in top()
-//	// if (isEmpty()) return 0;
-//
-//	char returnMePls = top();
-//	pop();
-//
-//	return returnMePls;
-//}
-//
-////
-//// print to cout
-//void Stack<char>::visualize() const
-//{
-//
-//	for (int i = 0; i < position; i++)
-//	{
-//		std::cout << "[" << i << "]: " << data[i] << std::endl;
-//	}
-//}
-//
-////
-//// isEmpty
-//bool Stack<char>::isEmpty() const
-//{
-//	return position == 0;
-//	// if (position == 0) return 1;
-//	// return 0;
-//}
-//
-////
-//// resize
-//void Stack<char>::resize()
-//{
-//	MAX *= 2;
-//
-//	char* replacer = new char[MAX];
-//
-//	for (int i = 0; i < position; i++)
-//	{
-//		replacer[i] = data[i];
-//	}
-//
-//	if (data != nullptr)
-//	{
-//		delete[] data;
-//	}
-//
-//	data = replacer;
-//}
-//
-//Stack<char>::~Stack()
-//{
-//	if (data != nullptr)
-//	{
-//		delete[] data;
-//	}
-//}
