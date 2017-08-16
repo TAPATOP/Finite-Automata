@@ -129,6 +129,9 @@ int main(int argc, char** argv)
 // ab\\s\\\\*f
 // (a|\\s)*|(\\\\|\\w)(\\\\\\a)
 // (a|\\s)*|(\\\\|\\d)(\\\\\\a) -> tests for valid capitalization of escaped letters without messing stuff up
+// \\ab\\e\\\\\\d
+// \\ab\\c\\\\\\d -> returns an error, as expected
+// ad\\s\\\\\\e\\\\\\d
 
 // /LinkedList
 // while(true) {multiple enqueues and dequeues}

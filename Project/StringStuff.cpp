@@ -148,6 +148,7 @@ namespace ss
 			lastSymbolWasSpecial = 0;
 		}
 
+		// insert the operators //
 		while (infix[index])
 		{
 			currentSymbolType = symbol_type(infix[index]);
@@ -181,33 +182,8 @@ namespace ss
 			{
 				newInfix[newIndex++] = '.';
 			}
-			char newChar = decapitalize_char(infix[index]);
-
-			if (!lastSymbolWasSpecial)
-			{
-				newInfix[newIndex++] = newChar;
-				if (symbol_type(newChar) == 2)
-				{
-					lastSymbolWasSpecial = 1;
-				}
-			}
-			else
-			{
-				// saves the escaped symbols by capitalizing them and overwriting
-				// the escaping '\\'
-				if (!can_escape(newChar))
-				{
-					std::cout << "You cannot escape this symbol!" << std::endl;
-					return nullptr;
-				}
-
-				lastSymbolWasSpecial = 0;
-				if (symbol_type(newInfix[newIndex - 1]) != 2)
-				{
-					newIndex++;
-				}
-				newInfix[newIndex - 1] = capitalize_char(newChar);
-			}
+			
+			newInfix[newIndex++] = infix[index];
 			
 			lastSymbolType = currentSymbolType;
 			index++;
@@ -216,7 +192,61 @@ namespace ss
 		// terminate the new string
 		newInfix[newIndex] = 0;
 
+		squish_infix(newInfix);
+
 		return newInfix;
+	}
+
+	char * squish_infix(char * infix)
+	{
+		bool lastSymbolWasSpecial = 0;
+
+		int squishedIndex = 0;
+		int oldIndex = 0;
+
+		if (symbol_type(infix[oldIndex]) == 2)
+		{
+			lastSymbolWasSpecial = 1;
+		}
+		else
+		{
+			++squishedIndex;
+		}
+		++oldIndex;
+
+		while (infix[oldIndex])
+		{
+			char newChar = decapitalize_char(infix[oldIndex]);
+
+			if (lastSymbolWasSpecial)
+			{
+				lastSymbolWasSpecial = 0;
+				// saves the escaped symbols by capitalizing them and overwriting
+				// the escaping '\\'
+				if (!can_escape(newChar))
+				{
+					std::cout << "You cannot escape this symbol!" << std::endl;
+					return nullptr;
+				}
+				infix[squishedIndex++] = capitalize_char(newChar);
+			}
+			else
+			{
+				infix[squishedIndex] = newChar;
+				if (symbol_type(newChar) == 2)
+				{
+					lastSymbolWasSpecial = 1;
+				}
+				else
+				{
+					++squishedIndex;
+				}
+			}
+			oldIndex++;
+		}
+
+		infix[squishedIndex] = 0;
+		return infix;
 	}
 	
 

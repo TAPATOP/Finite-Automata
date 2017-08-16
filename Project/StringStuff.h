@@ -31,6 +31,7 @@ namespace ss
 	// / returns a dynamycally allocated char array
 	char* preprocess_infix(char* infix);
 
+	char* squish_infix(char* infix);
 
 	// takes an infix string, normalizes it through a helper function and
 	// converts it to postfix
