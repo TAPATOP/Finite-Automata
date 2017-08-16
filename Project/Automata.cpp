@@ -74,6 +74,21 @@ void Automata::alternate_with(Automata* alternateAutomata)
 	delete alternateAutomata;
 }
 
+void Automata::finalize()
+{
+	State* matchState = new State(StateTransitionCodes::Match);
+
+	LinkedList<State*>::Node* node = outStatesList->grant_access_to_first();
+
+	while (node != nullptr)
+	{
+		node->data->next = matchState;
+		node = node->next;
+	}
+
+	// delete outStatesList;
+}
+
 Automata::~Automata()
 {
 }

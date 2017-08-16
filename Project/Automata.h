@@ -36,7 +36,9 @@ public:
 	// the alternation has taken place( since, technically, you have >merged< two Automatas into one
 	void alternate_with(Automata* alternateAutomata);
 
-	//void destroy_machine();
+	void finalize();
+
+	//void destroy_machine(); // this is needed because we don't want the destructor to destroy everything
 
 	~Automata();
 private:

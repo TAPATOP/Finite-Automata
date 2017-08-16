@@ -9,7 +9,7 @@
 int main(int argc, char** argv)
 {
 	argv[1] = "file.txt";
-	argv[2] = "a b(c*d)e";
+	argv[2] = "a\\\\|\\\\*d";
 	
 	argc = 3;
 
@@ -109,6 +109,16 @@ int main(int argc, char** argv)
 		}
 
 	} while (postfix[index++]);
+
+	automataToPush = automataStack.topNpop();
+
+	if (!automataStack.isEmpty())
+	{
+		std::cout << "I believe you have missing operators" << std::endl;
+		return 3;
+	}
+
+	automataToPush->finalize();
 
 	return 0;
 }

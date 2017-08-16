@@ -197,6 +197,7 @@ namespace ss
 		return newInfix;
 	}
 
+
 	char * squish_infix(char * infix)
 	{
 		bool lastSymbolWasSpecial = 0;
