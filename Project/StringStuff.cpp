@@ -64,12 +64,6 @@ namespace ss
 
 		if (infix == nullptr) return nullptr;
 
-		// checks if string is empty //
-
-		if (newSize == 0)
-		{
-			return nullptr; // TODO: should be made a bit different
-		}
 		///////////////////////
 		// ADD EXPLICIT OPERATORS part
 		//////////////////////
@@ -192,7 +186,7 @@ namespace ss
 		// terminate the new string
 		newInfix[newIndex] = 0;
 
-		squish_infix(newInfix);
+		newInfix = squish_infix(newInfix);
 
 		return newInfix;
 	}
@@ -249,7 +243,11 @@ namespace ss
 			}
 			oldIndex++;
 		}
-
+		if (lastSymbolWasSpecial)
+		{
+			std::cout << "Please take a look at your escape sequences attempts" << std::endl;
+			return nullptr;
+		}
 		infix[squishedIndex] = 0;
 		return infix;
 	}
@@ -257,8 +255,14 @@ namespace ss
 
 	char* infix_to_postfix(char* inputInfix)
 	{
+		if (strlen(inputInfix) == 0)
+		{
+			return "E";
+		}
 		char* infix = preprocess_infix(inputInfix);
 
+		// if infix == nullptr, preprocess_infix() has already printed out a message so we 
+		// dont need to print anything now
 		if (infix == nullptr) return nullptr;
 
 		int infixSize = strlen(infix);

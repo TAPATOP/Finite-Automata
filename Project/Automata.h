@@ -36,7 +36,18 @@ public:
 	// the alternation has taken place( since, technically, you have >merged< two Automatas into one
 	void alternate_with(Automata* alternateAutomata);
 
-	void finalize();
+
+	// adds a final state and connects all nodes to it, emptying outStatesList in the process
+	bool finalize();
+
+
+	// adds the startStart into the outStatesList; it's gonna be used when reading characters
+	// so I don't have to allocate a new list
+	void prepare_for_reading();
+
+
+	// traverses the automata based on the given character
+	int give_letter(char c);
 
 	//void destroy_machine(); // this is needed because we don't want the destructor to destroy everything
 

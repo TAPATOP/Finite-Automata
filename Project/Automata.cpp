@@ -74,12 +74,18 @@ void Automata::alternate_with(Automata* alternateAutomata)
 	delete alternateAutomata;
 }
 
-void Automata::finalize()
+bool Automata::finalize()
 {
 	// create the matching state
 	State* matchState = new State(StateTransitionCodes::Match);
 
 	State* state = nullptr;
+
+	if (outStatesList == nullptr)
+	{
+		std::cout << "The Automata hasn't even been initialized?" << std::endl;
+		return 0;
+	}
 
 	// connect all outArrows to the matching state
 	while (!outStatesList->is_empty())
@@ -87,6 +93,17 @@ void Automata::finalize()
 		state = outStatesList->dequeue();
 		state->next = matchState;
 	}
+	return 1;
+}
+
+void Automata::prepare_for_reading()
+{
+	outStatesList->enqueue(startState);
+}
+
+int Automata::give_letter(char c)
+{
+	return 0;
 }
 
 Automata::~Automata()

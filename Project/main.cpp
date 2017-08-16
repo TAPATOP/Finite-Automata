@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 
 #include "Automata.h"
 #include "LinkedList.h"
@@ -9,7 +10,7 @@
 int main(int argc, char** argv)
 {
 	argv[1] = "file.txt";
-	argv[2] = "a\\\\|\\\\*d";
+	argv[2] = "";
 	
 	argc = 3;
 
@@ -110,6 +111,8 @@ int main(int argc, char** argv)
 
 	} while (postfix[index++]);
 
+	// finalization of automata and error check //
+
 	automataToPush = automataStack.topNpop();
 
 	if (!automataStack.isEmpty())
@@ -118,7 +121,35 @@ int main(int argc, char** argv)
 		return 3;
 	}
 
-	automataToPush->finalize();
+	if (!automataToPush->finalize())
+	{
+		return 4;
+	}
+
+	////////////////////////
+	// READ AND MATCH DATA
+	//////////////////////
+
+
+	std::ifstream inputFile(argv[1]);
+
+	const int MAX_TEXT_SIZE = 1024;
+	char* inputText = new char[MAX_TEXT_SIZE + 1];
+
+	index = 0;
+	int lineCounter = 1;
+	while (!inputFile.eof())
+	{
+		inputFile.getline(inputText, MAX_TEXT_SIZE);
+		inputText[inputFile.gcount()] = 0;
+
+		while (inputText[index])
+		{
+
+			index++;
+		}
+
+	}
 
 	return 0;
 }
@@ -154,6 +185,7 @@ int main(int argc, char** argv)
 // \\ab\\e\\\\\\d
 // \\ab\\c\\\\\\d -> returns an error, as expected
 // ad\\s\\\\\\e\\\\\\d
+// \\a\\\\\\\\\\\\\\d\\d\\ -> returns an error for having a lonely (._. ) escape character
 
 // /LinkedList
 // while(true) {multiple enqueues and dequeues}
