@@ -76,17 +76,17 @@ void Automata::alternate_with(Automata* alternateAutomata)
 
 void Automata::finalize()
 {
+	// create the matching state
 	State* matchState = new State(StateTransitionCodes::Match);
 
-	LinkedList<State*>::Node* node = outStatesList->grant_access_to_first();
+	State* state = nullptr;
 
-	while (node != nullptr)
+	// connect all outArrows to the matching state
+	while (!outStatesList->is_empty())
 	{
-		node->data->next = matchState;
-		node = node->next;
+		state = outStatesList->dequeue();
+		state->next = matchState;
 	}
-
-	// delete outStatesList;
 }
 
 Automata::~Automata()

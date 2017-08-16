@@ -46,3 +46,4 @@ private:
 	LinkedList<State*>* outStatesList;
 };
 
+// TODO: stop deleting shit here
