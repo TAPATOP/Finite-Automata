@@ -47,7 +47,7 @@ public:
 
 
 	// traverses the automata based on the given character
-	int give_letter(char c);
+	int process_letter(char c, int listID);
 
 	//void destroy_machine(); // this is needed because we don't want the destructor to destroy everything
 

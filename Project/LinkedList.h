@@ -21,6 +21,12 @@ public:
 	LinkedList();
 	LinkedList(T);
 
+	void setFirst(Node* first);
+	void setLast(Node* last);
+
+	Node* getFirst();
+	Node* getLast();
+
 	void enqueue(T);
 	T dequeue();
 	void concatenate_with(LinkedList<T>*& followingList);
@@ -29,7 +35,7 @@ public:
 	bool is_empty();
 
 	void print_all();
-	
+
 	~LinkedList();
 private:
 
@@ -50,6 +56,30 @@ LinkedList<T>::LinkedList(T val)
 	first = new Node(val);
 
 	last = first;
+}
+
+template<class T>
+inline void LinkedList<T>::setFirst(Node * first)
+{
+	this->first = first;
+}
+
+template<class T>
+inline void LinkedList<T>::setLast(Node * last)
+{
+	this->last = last;
+}
+
+template<class T>
+inline typename LinkedList<T>::Node * LinkedList<T>::getFirst()
+{
+	return first;
+}
+
+template<class T>
+inline typename LinkedList<T>::Node * LinkedList<T>::getLast()
+{
+	return last;
 }
 
 template <class T>

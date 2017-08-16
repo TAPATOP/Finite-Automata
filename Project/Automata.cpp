@@ -101,7 +101,7 @@ void Automata::prepare_for_reading()
 	startState->get_enqueued(outStatesList, 0);
 }
 
-int Automata::give_letter(char c)
+int Automata::process_letter(char c, int listID)
 {
 	LinkedList<State*>* newList = new LinkedList<State*>;
 
@@ -111,12 +111,18 @@ int Automata::give_letter(char c)
 	{
 		state = outStatesList->dequeue();
 
-
+		state->process_symbol(c, newList, listID);
+		//state->next->get_enqueued(newList, listID);
 	}
 
 	// returns error if the list is empty, which means no states have managed to
-	// execute the current letter
-	if (!newList->is_empty())  return 1;
+	// execute the current letter which means the automata is bork
+
+	delete outStatesList;
+
+	outStatesList = newList; 
+	
+	if (newList->is_empty())  return 1;
 
 	return 0;
 }

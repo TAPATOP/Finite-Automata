@@ -10,7 +10,7 @@
 int main(int argc, char** argv)
 {
 	argv[1] = "file.txt";
-	argv[2] = "\\ead\\e";
+	argv[2] = "(((ab*)(cd)*)|de*)|(ad)*";
 	
 	argc = 3;
 
@@ -131,11 +131,12 @@ int main(int argc, char** argv)
 	//////////////////////
 
 	readyAutomata->prepare_for_reading();
+	readyAutomata->process_letter('d', 1);
 
 	std::ifstream inputFile(argv[1]);
 
 	const int MAX_TEXT_SIZE = 1024;
-	char* inputText = new char[MAX_TEXT_SIZE + 1];
+	char inputText [MAX_TEXT_SIZE + 1];
 
 	index = 0;
 	int lineCounter = 1;
@@ -154,7 +155,9 @@ int main(int argc, char** argv)
 }
 
 // TODO: Big three for the structures
-// make it work with empty regex
+// fix the char*s that are allocated in postfix works - dynamic or static
+// use an array queue instead of a list for the automata's work
+// read from a folder..............
 
 // / infix_to_postfix() testing with valid expressions
 // a.(b*.c.d)|e.f

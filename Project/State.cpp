@@ -9,30 +9,46 @@ State::State(int transitionCharacter, State* first, State* second)
 	this->next2 = second;
 }
 
-bool State::can_match_symbol(char c, LinkedList<State*>* stateList, int listID)
+void State::process_symbol(char c, LinkedList<State*>* listForEnqueue, int listID)
 {
 	int symbolType = symbol_type(c);
 
-
-
-	return 0;
+	if (get_state_transition_value_by_char(c) == this->transitionCharacter)
+	{
+		next->get_enqueued(listForEnqueue, listID);
+	}
 }
 
 
-void State::get_enqueued(LinkedList<State*>* stateList, int listID)
+// enqueues this to the given list and technically passes the null string to Split states
+// to it, resulting in recursive search for states that have a stateValue != Split
+// / TL;DR: Add States by this function, this way you will make sure the states saved
+// in the list are ones which recognize symbols and are not Splitting States
+void State::get_enqueued(LinkedList<State*>* listForEnqueue, int listID)
 {
-	// checks if this state is already queued
-	if (this->listID == listID) return;
+	// checks if this state has already been processed
+	if (this == nullptr || this->listID == listID) return;
 
-	// enqueues this state
+	// marks the state as "processed"
 	this->listID = listID;
-	stateList->enqueue(this);
 
 	// if this state is a split -> adds both it's children
 	if (this->transitionCharacter == StateTransitionCodes::Split)
 	{
-		next->get_enqueued(stateList, listID);
-		next2->get_enqueued(stateList, listID);
+		if (next2 == this)
+		{
+			listForEnqueue->enqueue(this);
+			next->get_enqueued(listForEnqueue, listID);
+		}
+		else
+		{
+			next->get_enqueued(listForEnqueue, listID);
+			next2->get_enqueued(listForEnqueue, listID);
+		}
+	}
+	else
+	{
+		listForEnqueue->enqueue(this);
 	}
 }
 
@@ -40,6 +56,7 @@ State::~State()
 {
 }
 
+// returns depending on character type:
 // 0 -> none of the below
 // 1 -> letter
 // 2 -> digit

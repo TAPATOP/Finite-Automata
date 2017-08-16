@@ -15,8 +15,8 @@ struct State
 {
 	State(int transitionCharacter, State* first = nullptr, State* second = nullptr);
 
-	bool can_match_symbol(char c, LinkedList<State*>* stateList, int listID);
-	void get_enqueued(LinkedList<State*>* stateList, int listID);
+	void process_symbol(char c, LinkedList<State*>* listForEnqueue, int listID);
+	void get_enqueued(LinkedList<State*>* listForEnqueue, int listID);
 
 	~State();
 // i know this "public" is ambigious but it makes reading the struct easier
