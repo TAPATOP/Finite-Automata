@@ -9,7 +9,7 @@
 int main(int argc, char** argv)
 {
 	argv[1] = "file.txt";
-	argv[2] = "a|a*.b"; // a | a*.b
+	argv[2] = "a b(c*d)e";
 	
 	argc = 3;
 
@@ -53,7 +53,15 @@ int main(int argc, char** argv)
 		case 2:
 		case 3:
 			stateTransitionValue = get_state_transition_value_by_char(currSymbol);
-			stateToPush = new State(stateTransitionValue);
+			if (stateTransitionValue == StateTransitionCodes::Empty)
+			{
+				stateToPush = new State(StateTransitionCodes::Split);
+				stateToPush->next2 = stateToPush;
+			}
+			else
+			{
+				stateToPush = new State(stateTransitionValue);
+			}
 			
 			automataToPush = new Automata(stateToPush, new LinkedList<State*>(stateToPush));
 			automataStack.push(automataToPush);
@@ -122,6 +130,7 @@ int main(int argc, char** argv)
 // ((a.b|cd)*(w.x|y.z))
 // (a.b)*|(d*e)*
 // (a\\\\)|a*.d
+// a|a*.b
 //
 // / escapes testing
 // \\ab\\cde\\\\ and \\\\\\\\\\\\ -> whether preprocess_infix() would allocate enough memory
@@ -139,7 +148,7 @@ int main(int argc, char** argv)
 // /LinkedList
 // while(true) {multiple enqueues and dequeues}
 
-// / Automaton build testing
+// / Automata build testing
 // ab
 // abcde
 // ab*
@@ -150,6 +159,9 @@ int main(int argc, char** argv)
 // ((a.b*(cd)*)|de*)|(a.d)* + same as above
 // (a||\\s)*|(\\\\|\\d)(\\\\\\a) -> printed error and stopped program => great
 // \\\\\\\\\\\\
+// \\e
+// ((a.b)*|de)|\\ea
+// \\e\\d\\a|\\s\\\\
 
 // / ss::decapitalize_char()
 // ((a.B*(cd)*)|de*)|(a.d)*

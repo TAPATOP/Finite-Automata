@@ -332,7 +332,7 @@ namespace ss
 					do
 					{
 						postfix[pIndex++] = stack.topNpop();
-					} while (!stack.isEmpty() && stack.top() != '(' && operator_precedence(currentSymbol) <= operator_precedence(stack.top()) );
+					} while (!stack.isEmpty() && stack.top() != '(' && operator_precedence(currentSymbol) > operator_precedence(stack.top()) );
 					stack.push(currentSymbol);
 					break;
 				}
