@@ -15,6 +15,13 @@ void State::process_symbol(char c, LinkedList<State*>* listForEnqueue, int listI
 	{
 		next->get_enqueued(listForEnqueue, listID);
 	}
+	// if this has the same address as next2, then this is the state of \\e, and as
+	// we know, the empty string matches everything
+	else if (this == this->next2)
+	{
+		get_enqueued(listForEnqueue, listID);
+	}
+		
 }
 
 
@@ -50,6 +57,21 @@ void State::get_enqueued(LinkedList<State*>* listForEnqueue, int listID)
 	}
 }
 
+
+void State::reset_states()
+{
+	listID = -1;
+	if (next2 != nullptr && next2->listID != -1)
+	{
+		next2->reset_states();
+	}
+	if (next != nullptr && next->listID != -1)
+	{
+		next->reset_states();
+	}
+}
+
+
 State::~State()
 {
 }
@@ -81,6 +103,7 @@ bool State::can_match_symbol(char c)
 
 	if (get_state_transition_value_by_char(c) == this->transitionCharacter) return true;
 	if (cType == transitionCharacter) return true;
+
 	return false;
 }
 

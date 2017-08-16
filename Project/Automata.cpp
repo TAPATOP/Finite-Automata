@@ -98,6 +98,7 @@ bool Automata::finalize()
 
 void Automata::prepare_for_reading()
 {
+	reset_states();
 	startState->get_enqueued(outStatesList, 0);
 }
 
@@ -142,4 +143,9 @@ bool Automata::dump_all_and_match()
 
 Automata::~Automata()
 {
+}
+
+void Automata::reset_states()
+{
+	startState->reset_states();
 }
