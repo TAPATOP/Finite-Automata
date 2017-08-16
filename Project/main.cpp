@@ -1,3 +1,17 @@
+/**
+*
+* Solution to homework task
+* Data Structures Course
+* Faculty of Mathematics and Informatics of Sofia University
+* Winter semester 2016/2017
+*
+* @author Hristo Hristov
+* @idnumber 61917
+* @task 0
+* @compiler VC
+*
+*/
+
 #include <iostream>
 #include <fstream>
 
@@ -110,15 +124,20 @@ static int find_directory(const char *dirname, std::ofstream& output)
 
 int main(int argc, char** argv)
 {
-	argv[1] = "fiwle.txt";
-	argv[2] = "\\ea\\e";
+	argv[1] = "MuhFolder";
+	argv[2] = "\\ea*a*bdefop|\\e|w|w*|\\e**\\e";
 	
 	argc = 3;
 
-	if (argc != 3)
+	if (argc != 2 && argc != 3)
 	{
-		std::cout << "Give me a file/folder name and a regex, please" << std::endl;
+		std::cout << "Give me ONE file/folder name, please. You can give a regex as well if you want" << std::endl;
 		return -3;
+	}
+
+	if (argc == 2)
+	{
+		argv[2] = "";
 	}
 
 	///////////////////////////////
@@ -133,8 +152,6 @@ int main(int argc, char** argv)
 	{
 		return 1;
 	}
-
-	// std::cout << postfix << std::endl;
 
 	/////////////////////
 	// AUTOMATA BUILDING
@@ -240,9 +257,9 @@ int main(int argc, char** argv)
 
 	// write names of files for checking into a file //
 
-	char* fileNameFile = "filenames.txt";
+	char* FILE_NAME_FILE = "filenames.txt";
 
-	std::ofstream fileNames(fileNameFile);
+	std::ofstream fileNames(FILE_NAME_FILE);
 
 	if (!fileNames.is_open())
 	{
@@ -267,8 +284,9 @@ int main(int argc, char** argv)
 	}
 
 	inputFile.close();
+	fileNames.close();
 
-	inputFile.open(fileNameFile);
+	inputFile.open(FILE_NAME_FILE);
 
 	const int MAX_TEXT_SIZE = 1024;
 	char inputText [MAX_TEXT_SIZE + 1];
@@ -280,18 +298,29 @@ int main(int argc, char** argv)
 	
 	char currentFileName[MAX_TEXT_SIZE + 1];
 
+	// check all of the files, one by one //
+
 	while (!inputFile.eof())
 	{
 		inputFile.getline(currentFileName, MAX_TEXT_SIZE);
-
+		// currentFileName[strlen(currentFileName)] = 0;
 		currentFile.open(currentFileName);
 
-		lineCounter = 0;
+		if (!currentFile.is_open() && !inputFile.eof())
+		{
+			if (strcmp(currentFileName, "\n") == 0)
+			{
+				std::cout << strcmp(currentFileName, "\n") << std::endl;
+			}
+			continue;
+		}
+
+		lineCounter = 1;
 		while (!currentFile.eof())
 		{
 			index = 0;
 			currentFile.getline(inputText, MAX_TEXT_SIZE);
-			inputText[currentFile.gcount()] = 0;
+			// inputText[currentFile.gcount()] = 0;
 			readyAutomata->prepare_for_reading();
 
 			while (inputText[index])
@@ -302,18 +331,23 @@ int main(int argc, char** argv)
 
 			if (readyAutomata->dump_all_and_match())
 			{
-				std::cout << argv[1] << ":" << lineCounter << ":" << inputText << std::endl;
+				std::cout << currentFileName << ":" << lineCounter << ":" << inputText << std::endl;
 			}
 			++lineCounter;
 		}
+		currentFile.close();
 	}
+
 	return 0;
 }
 
 // TODO: Big three for the structures
 // fix the char*s that are allocated in postfix works - dynamic or static
 // use an array queue instead of a list for the automata's work
-// read from a folder..............
+
+//////////////////////////////////////////////////////////////////////////////////
+///////////////// Some of the performed test examples/////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 
 // / infix_to_postfix() testing with valid expressions
 // a.(b*.c.d)|e.f

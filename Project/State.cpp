@@ -1,3 +1,17 @@
+/**
+*
+* Solution to homework task
+* Data Structures Course
+* Faculty of Mathematics and Informatics of Sofia University
+* Winter semester 2016/2017
+*
+* @author Hristo Hristov
+* @idnumber 61917
+* @task 0
+* @compiler VC
+*
+*/
+
 #include "State.h"
 
 
@@ -8,6 +22,7 @@ State::State(int transitionCharacter, State* first, State* second)
 	this->next = first;
 	this->next2 = second;
 }
+
 
 void State::process_symbol(char c, LinkedList<State*>* listForEnqueue, int listID)
 {
@@ -25,10 +40,6 @@ void State::process_symbol(char c, LinkedList<State*>* listForEnqueue, int listI
 }
 
 
-// enqueues this to the given list and technically passes the null string to Split states
-// to it, resulting in recursive search for states that have a stateValue != Split
-// / TL;DR: Add States by this function, this way you will make sure the states saved
-// in the list are ones which recognize symbols and are not Splitting States
 void State::get_enqueued(LinkedList<State*>* listForEnqueue, int listID)
 {
 	// checks if this state has already been processed
@@ -72,14 +83,25 @@ void State::reset_states()
 }
 
 
+void State::delete_states()
+{
+	//if (next2 != nullptr && next2 != this)
+	//{
+	//	next2->delete_states();
+	//}
+	//if (next != nullptr)
+	//{
+	//	next->delete_states();
+	//}
+	//delete this;
+}
+
+
 State::~State()
 {
 }
 
-// returns depending on character type:
-// 0 -> none of the below
-// 1 -> letter
-// 2 -> digit
+
 int State::symbol_type(char c)
 {
 	if (c >= 'a' && c <= 'z')
@@ -96,6 +118,7 @@ int State::symbol_type(char c)
 	}
 	return 0;
 }
+
 
 bool State::can_match_symbol(char c)
 {
