@@ -11,9 +11,7 @@ State::State(int transitionCharacter, State* first, State* second)
 
 void State::process_symbol(char c, LinkedList<State*>* listForEnqueue, int listID)
 {
-	int symbolType = symbol_type(c);
-
-	if (get_state_transition_value_by_char(c) == this->transitionCharacter)
+	if (can_match_symbol(c))
 	{
 		next->get_enqueued(listForEnqueue, listID);
 	}
@@ -64,13 +62,26 @@ int State::symbol_type(char c)
 {
 	if (c >= 'a' && c <= 'z')
 	{
-		return 1;
+		return StateTransitionCodes::Letter;
 	}
 	if (c >= '0' && c <= '9')
 	{
-		return 2;
+		return StateTransitionCodes::Digit;
+	}
+	if (c == ' ' || c == '\t')
+	{
+		return StateTransitionCodes::Space;
 	}
 	return 0;
+}
+
+bool State::can_match_symbol(char c)
+{
+	int cType = symbol_type(c);
+
+	if (get_state_transition_value_by_char(c) == this->transitionCharacter) return true;
+	if (cType == transitionCharacter) return true;
+	return false;
 }
 
 

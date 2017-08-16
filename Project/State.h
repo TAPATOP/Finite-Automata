@@ -19,14 +19,15 @@ struct State
 	void get_enqueued(LinkedList<State*>* listForEnqueue, int listID);
 
 	~State();
-// i know this "public" is ambigious but it makes reading the struct easier
+private:
+	int symbol_type(char c);
+	bool can_match_symbol(char c);
+
 public:
 	unsigned short transitionCharacter = 0;
 	State* next = nullptr;
 	State* next2 = nullptr;
 	int listID = -1;
-private:
-	int symbol_type(char c);
 };
 
 int get_state_transition_value_by_char(char c);

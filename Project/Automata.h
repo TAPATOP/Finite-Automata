@@ -49,6 +49,12 @@ public:
 	// traverses the automata based on the given character
 	int process_letter(char c, int listID);
 
+	// traverses the outStatesList and checks if any of the States in it is Match
+	// ! WARNING !
+	// dequeues all of the States, thus preparing the Automata to work again
+	bool dump_all_and_match();
+
+
 	//void destroy_machine(); // this is needed because we don't want the destructor to destroy everything
 
 	~Automata();

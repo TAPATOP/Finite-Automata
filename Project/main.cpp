@@ -10,7 +10,7 @@
 int main(int argc, char** argv)
 {
 	argv[1] = "file.txt";
-	argv[2] = "(((ab*)(cd)*)|de*)|(ad)*";
+	argv[2] = "\\a*\\s\\d*";
 	
 	argc = 3;
 
@@ -129,9 +129,21 @@ int main(int argc, char** argv)
 	////////////////////////
 	// READ AND MATCH DATA
 	//////////////////////
-
-	readyAutomata->prepare_for_reading();
-	readyAutomata->process_letter('d', 1);
+	int kek = 0;
+	while (kek++ < 100000)
+	{
+		readyAutomata->prepare_for_reading();
+		readyAutomata->process_letter('a', 1);
+		readyAutomata->process_letter('b', 2);
+		readyAutomata->process_letter('c', 3);
+		readyAutomata->process_letter(' ', 4);
+		readyAutomata->process_letter('6', 5);
+		readyAutomata->process_letter('9', 6);
+		if (readyAutomata->dump_all_and_match())
+		{
+			//std::cout << "I have matched :)" << std::endl;
+		}
+	}
 
 	std::ifstream inputFile(argv[1]);
 
@@ -209,3 +221,6 @@ int main(int argc, char** argv)
 
 // / ss::decapitalize_char()
 // ((a.B*(cd)*)|de*)|(a.d)*
+
+// / Automata working test
+// \\a*\\s\\d* with string abc 69

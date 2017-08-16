@@ -112,7 +112,6 @@ int Automata::process_letter(char c, int listID)
 		state = outStatesList->dequeue();
 
 		state->process_symbol(c, newList, listID);
-		//state->next->get_enqueued(newList, listID);
 	}
 
 	// returns error if the list is empty, which means no states have managed to
@@ -125,6 +124,20 @@ int Automata::process_letter(char c, int listID)
 	if (newList->is_empty())  return 1;
 
 	return 0;
+}
+
+bool Automata::dump_all_and_match()
+{
+	bool hasMatched = 0;
+	while (!outStatesList->is_empty())
+	{
+		if (outStatesList->dequeue()->transitionCharacter == StateTransitionCodes::Match)
+		{
+			hasMatched = 1;
+		}
+	}
+
+	return hasMatched;
 }
 
 Automata::~Automata()
