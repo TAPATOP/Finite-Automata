@@ -10,7 +10,7 @@
 int main(int argc, char** argv)
 {
 	argv[1] = "file.txt";
-	argv[2] = "";
+	argv[2] = "\\ead\\e";
 	
 	argc = 3;
 
@@ -40,7 +40,7 @@ int main(int argc, char** argv)
 
 	Stack<Automata*> automataStack;
 	State* stateToPush = nullptr;
-	Automata* automataToPush = nullptr;
+
 	Automata* a1 = nullptr;
 	Automata* a2 = nullptr;
 
@@ -64,8 +64,8 @@ int main(int argc, char** argv)
 				stateToPush = new State(stateTransitionValue);
 			}
 			
-			automataToPush = new Automata(stateToPush, new LinkedList<State*>(stateToPush));
-			automataStack.push(automataToPush);
+			a1 = new Automata(stateToPush, new LinkedList<State*>(stateToPush));
+			automataStack.push(a1);
 			break;
 		case 1:
 			switch (currSymbol)
@@ -113,7 +113,7 @@ int main(int argc, char** argv)
 
 	// finalization of automata and error check //
 
-	automataToPush = automataStack.topNpop();
+	Automata* readyAutomata = automataStack.topNpop();
 
 	if (!automataStack.isEmpty())
 	{
@@ -121,7 +121,7 @@ int main(int argc, char** argv)
 		return 3;
 	}
 
-	if (!automataToPush->finalize())
+	if (!readyAutomata->finalize())
 	{
 		return 4;
 	}
@@ -130,6 +130,7 @@ int main(int argc, char** argv)
 	// READ AND MATCH DATA
 	//////////////////////
 
+	readyAutomata->prepare_for_reading();
 
 	std::ifstream inputFile(argv[1]);
 
@@ -148,9 +149,7 @@ int main(int argc, char** argv)
 
 			index++;
 		}
-
 	}
-
 	return 0;
 }
 

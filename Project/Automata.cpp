@@ -98,11 +98,26 @@ bool Automata::finalize()
 
 void Automata::prepare_for_reading()
 {
-	outStatesList->enqueue(startState);
+	startState->get_enqueued(outStatesList, 0);
 }
 
 int Automata::give_letter(char c)
 {
+	LinkedList<State*>* newList = new LinkedList<State*>;
+
+	State* state = nullptr;
+
+	while (!outStatesList->is_empty())
+	{
+		state = outStatesList->dequeue();
+
+
+	}
+
+	// returns error if the list is empty, which means no states have managed to
+	// execute the current letter
+	if (!newList->is_empty())  return 1;
+
 	return 0;
 }
 

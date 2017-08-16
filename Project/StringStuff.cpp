@@ -267,9 +267,9 @@ namespace ss
 
 		int infixSize = strlen(infix);
 
-		const int maxSize = 1024;
+		const int MAX_SIZE = 1024;
 
-		if (infixSize > maxSize)
+		if (infixSize > MAX_SIZE)
 		{
 			std::cout << "Too large regex" << std::endl;
 			return nullptr;
