@@ -1,18 +1,125 @@
 #include <iostream>
 #include <fstream>
 
+#include "dirent.h"
+
 #include "Automata.h"
 #include "LinkedList.h"
 #include "Stack.h"
 #include "State.h"
 #include "StringStuff.h"
 
+// BEWARE THE FUNCTION BELOW IS STOLEN
+// BEWARE THE FUNCTION BELOW IS STOLEN
+// BEWARE THE FUNCTION BELOW IS STOLEN
+
+// SOURCE OF THE STOLEN FUNCTION WHICH IS BELOW:
+// https://github.com/tronkko/dirent/blob/master/examples/find.c
+
+/* Find files and subdirectories recursively */
+static int find_directory(const char *dirname, std::ofstream& output)
+{
+	DIR *dir;
+	char buffer[PATH_MAX + 2];
+	char *p = buffer;
+	const char *src;
+	char *end = &buffer[PATH_MAX];
+	int ok;
+
+	/* Copy directory name to buffer */
+	src = dirname;
+	while (p < end  &&  *src != '\0') {
+		*p++ = *src++;
+	}
+	*p = '\0';
+
+	/* Open directory stream */
+	dir = opendir(dirname);
+	if (dir != NULL) {
+		struct dirent *ent;
+
+		/* Print all files and directories within the directory */
+		while ((ent = readdir(dir)) != NULL) {
+			char *q = p;
+			char c;
+
+			/* Get final character of directory name */
+			if (buffer < q) {
+				c = q[-1];
+			}
+			else {
+				c = ':';
+			}
+
+			/* Append directory separator if not already there */
+			if (c != ':'  &&  c != '/'  &&  c != '\\') {
+				*q++ = '/';
+			}
+
+			/* Append file name */
+			src = ent->d_name;
+			while (q < end  &&  *src != '\0') {
+				*q++ = *src++;
+			}
+			*q = '\0';
+
+			/* Decide what to do with the directory entry */
+			switch (ent->d_type) {
+			case DT_LNK:
+			case DT_REG:
+				/* Output file name with directory */
+				output.write(buffer, strlen(buffer));
+				output.write("\n", 1);
+				break;
+
+			case DT_DIR:
+				/* Scan sub-directory recursively */
+				if (strcmp(ent->d_name, ".") != 0
+					&& strcmp(ent->d_name, "..") != 0) {
+					find_directory(buffer, output);
+				}
+				break;
+
+			default:
+				/* Ignore device entries */
+				/*NOP*/;
+			}
+
+		}
+
+		closedir(dir);
+		ok = 1;
+
+	}
+	else {
+		/* Could not open directory */
+		printf("Cannot open directory %s\n", dirname);
+		ok = 0;
+	}
+
+	return ok;
+
+}
+// SOURCE OF THE STOLEN FUNCTION WHICH IS ABOVE:
+// https://github.com/tronkko/dirent/blob/master/examples/find.c
+
+// BEWARE THE FUNCTION ABOVE IS STOLEN
+// BEWARE THE FUNCTION ABOVE IS STOLEN
+// BEWARE THE FUNCTION ABOVE IS STOLEN
+
+
 int main(int argc, char** argv)
 {
-	argv[1] = "file.txt";
-	argv[2] = "\\ea";
+	argv[1] = "fiwle.txt";
+	argv[2] = "\\ea\\e";
 	
 	argc = 3;
+
+	if (argc != 3)
+	{
+		std::cout << "Give me a file/folder name and a regex, please" << std::endl;
+		return -3;
+	}
 
 	///////////////////////////////
 	// REGEX PREPROCESSING 
@@ -130,19 +237,38 @@ int main(int argc, char** argv)
 	// READ AND MATCH DATA
 	//////////////////////
 
-	// readyAutomata->prepare_for_reading();
-	// readyAutomata->process_letter('a', 1);
-	// readyAutomata->process_letter('b', 2);
-	// readyAutomata->process_letter('c', 3);
-	// readyAutomata->process_letter(' ', 4);
-	// readyAutomata->process_letter('6', 5);
-	// readyAutomata->process_letter('9', 6);
-	// if (readyAutomata->dump_all_and_match())
-	// {
-	// 	//std::cout << "I have matched :)" << std::endl;
-	// }
+
+	// write names of files for checking into a file //
+
+	char* fileNameFile = "filenames.txt";
+
+	std::ofstream fileNames(fileNameFile);
+
+	if (!fileNames.is_open())
+	{
+		std::cout << "I can't create a new file in which to save the file names : (" << std::endl;
+		return -1;
+	}
+
 
 	std::ifstream inputFile(argv[1]);
+
+	if (!inputFile.is_open())
+	{
+		if (!find_directory(argv[1], fileNames))
+		{
+			std::cout << "There is neither a folder nor a file with the given name" << std::endl;
+			return -2;
+		}
+	}
+	else
+	{
+		fileNames.write(argv[1], strlen(argv[1]));
+	}
+
+	inputFile.close();
+
+	inputFile.open(fileNameFile);
 
 	const int MAX_TEXT_SIZE = 1024;
 	char inputText [MAX_TEXT_SIZE + 1];
@@ -150,24 +276,36 @@ int main(int argc, char** argv)
 	index = 0;
 	int lineCounter = 1;
 
+	std::ifstream currentFile;
+	
+	char currentFileName[MAX_TEXT_SIZE + 1];
+
 	while (!inputFile.eof())
 	{
-		index = 0;
-		inputFile.getline(inputText, MAX_TEXT_SIZE);
-		inputText[inputFile.gcount()] = 0;
-		readyAutomata->prepare_for_reading();
+		inputFile.getline(currentFileName, MAX_TEXT_SIZE);
 
-		while (inputText[index])
-		{
-			if (readyAutomata->process_letter(inputText[index], index + 1) == 1) break;
-			index++;
-		}
+		currentFile.open(currentFileName);
 
-		if (readyAutomata->dump_all_and_match())
+		lineCounter = 0;
+		while (!currentFile.eof())
 		{
-			std::cout << argv[1] << ":" << lineCounter << ":" << inputText << std::endl;
+			index = 0;
+			currentFile.getline(inputText, MAX_TEXT_SIZE);
+			inputText[currentFile.gcount()] = 0;
+			readyAutomata->prepare_for_reading();
+
+			while (inputText[index])
+			{
+				if (readyAutomata->process_letter(ss::decapitalize_char(inputText[index]), index + 1) == 1) break;
+				index++;
+			}
+
+			if (readyAutomata->dump_all_and_match())
+			{
+				std::cout << argv[1] << ":" << lineCounter << ":" << inputText << std::endl;
+			}
+			++lineCounter;
 		}
-		++lineCounter;
 	}
 	return 0;
 }
@@ -237,3 +375,5 @@ int main(int argc, char** argv)
 // \\a*
 // \\a*|\\d*
 // a(b*cd)|ef
+// ""
+// \\ea\\e -> everything that has at least one "a"
