@@ -204,6 +204,8 @@ namespace ss
 		int squishedIndex = 0;
 		int oldIndex = 0;
 
+		// handle the first symbol //
+
 		if (symbol_type(infix[oldIndex]) == 2)
 		{
 			lastSymbolWasSpecial = 1;
@@ -213,6 +215,8 @@ namespace ss
 			++squishedIndex;
 		}
 		++oldIndex;
+
+		// iterate throghout the remaining string //
 
 		while (infix[oldIndex])
 		{
@@ -328,7 +332,7 @@ namespace ss
 					do
 					{
 						postfix[pIndex++] = stack.topNpop();
-					} while (stack.top() != '(' && operator_precedence(currentSymbol) <= operator_precedence(stack.top()) );
+					} while (!stack.isEmpty() && stack.top() != '(' && operator_precedence(currentSymbol) <= operator_precedence(stack.top()) );
 					stack.push(currentSymbol);
 					break;
 				}

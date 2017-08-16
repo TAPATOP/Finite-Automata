@@ -9,7 +9,7 @@
 int main(int argc, char** argv)
 {
 	argv[1] = "file.txt";
-	argv[2] = "\\\\\\\\\\\\";
+	argv[2] = "a|a*.b"; // a | a*.b
 	
 	argc = 3;
 
@@ -35,6 +35,7 @@ int main(int argc, char** argv)
 	int index = 0;
 	int currSymbolType = 0;
 	char currSymbol = 0;
+	int stateTransitionValue = 0;
 
 	Stack<Automata*> automataStack;
 	State* stateToPush = nullptr;
@@ -51,7 +52,8 @@ int main(int argc, char** argv)
 		{
 		case 2:
 		case 3:
-			stateToPush = new State(get_state_transition_value_by_char(currSymbol));
+			stateTransitionValue = get_state_transition_value_by_char(currSymbol);
+			stateToPush = new State(stateTransitionValue);
 			
 			automataToPush = new Automata(stateToPush, new LinkedList<State*>(stateToPush));
 			automataStack.push(automataToPush);
@@ -119,6 +121,7 @@ int main(int argc, char** argv)
 // ((ab|cd)*(wx|yz)) and ((a.b|c.d)*.(w.x|y.z))
 // ((a.b|cd)*(w.x|y.z))
 // (a.b)*|(d*e)*
+// (a\\\\)|a*.d
 //
 // / escapes testing
 // \\ab\\cde\\\\ and \\\\\\\\\\\\ -> whether preprocess_infix() would allocate enough memory

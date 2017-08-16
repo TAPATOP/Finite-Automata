@@ -26,12 +26,20 @@ namespace ss
 	// returns nullptr if:
 	// - the given string is empty
 	// - the given string has an invalid character
-	// - the given string had an escape character infront of something you can't escape
 	// / adds explicit '.' operators
 	// / returns a dynamycally allocated char array
 	char* preprocess_infix(char* infix);
 
+
+	// squishes '\\' and the escaped character into one so they can be pushed
+	// down the stack as a single char
+	// / checks validity of input 
+	// returns nullptr if:
+	// - the given string had an escape character infront of something you can't escape
+	// / inplace work
+	// changes the given character itself, so you really shouldn't try giving a const string
 	char* squish_infix(char* infix);
+
 
 	// takes an infix string, normalizes it through a helper function and
 	// converts it to postfix
